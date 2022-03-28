@@ -1,0 +1,5 @@
+export const ERROR_CODES = {
+  // UNAUTHORIZED: '1002',
+  MODEL_NOT_FOUND: '2001',
+  INTERNAL_SERVER_ERROR: '4000',
+};
