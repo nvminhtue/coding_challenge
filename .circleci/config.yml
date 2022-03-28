@@ -1,0 +1,67 @@
+orbs:
+  node: circleci/node@5.0.1
+version: 2.1
+jobs:
+  client_build:
+    docker:
+      - image: cimg/node:14.17
+    steps:
+      - checkout
+      - node/install:
+          install-yarn: true
+          node-version: '14.17'
+      - run:
+          command: cd client && yarn && yarn build
+          name: '[FE] Run YARN build'
+  client_lint:
+    docker:
+      - image: cimg/node:14.17
+    steps:
+      - checkout
+      - node/install:
+          install-yarn: true
+          node-version: '14.17'
+      - run:
+          command: cd client && yarn && yarn lint
+          name: '[FE] Run YARN lint'
+  server_build:
+    docker:
+      - image: cimg/node:14.17
+    steps:
+      - checkout
+      - node/install:
+          install-yarn: true
+          node-version: '14.17'
+      - run:
+          command: cd client && yarn && yarn build
+          name: '[BE] Run YARN build'
+  server_lint:
+    docker:
+      - image: cimg/node:14.17
+    steps:
+      - checkout
+      - node/install:
+          install-yarn: true
+          node-version: '14.17'
+      - run:
+          command: cd client && yarn && yarn lint
+          name: '[BE] Run YARN build'
+  server_test:
+    docker:
+      - image: cimg/node:14.17
+    steps:
+      - checkout
+      - node/install:
+          install-yarn: true
+          node-version: '14.17'
+      - run:
+          command: cd client && yarn && yarn test
+          name: '[BE] Run YARN test'
+workflows:
+  matrix-tests:
+    jobs:
+      - client_build
+      - client_lint
+      - server_build
+      - server_lint
+      - server_test
