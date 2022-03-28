@@ -1,0 +1,88 @@
+orbs:
+  node: circleci/node@5.0.1
+version: 2.1
+jobs:
+  client_build:
+    docker:
+      - image: cimg/node:14.17
+    steps:
+      - checkout
+      - node/install:
+          install-yarn: true
+          node-version: '14.17'
+      - run:
+          command: cd client && yarn && yarn build
+          name: '[FE] Run YARN build'
+  client_lint:
+    docker:
+      - image: cimg/node:14.17
+    steps:
+      - checkout
+      - node/install:
+          install-yarn: true
+          node-version: '14.17'
+      - run:
+          command: cd client && yarn && yarn lint
+          name: '[FE] Run YARN lint'
+  # client_test:
+  #   docker:
+  #     - image: cimg/node:14.17
+  #   steps:
+  #     - checkout
+  #     - node/install:
+  #         install-yarn: true
+  #         node-version: '14.17'
+  #     - run:
+  #         command: cd client && yarn && yarn test
+  #         name: '[FE] Run YARN test'
+  server_build:
+    docker:
+      - image: cimg/node:14.17
+    working_directory: ~/server
+    steps:
+      - checkout
+      - node/install:
+          install-yarn: true
+          node-version: '14.17'
+      - run:
+          command: cd server && yarn && yarn build
+          name: '[BE] Run YARN build'
+      - persist_to_workspace:
+          root: .
+          paths:
+            - .
+  server_lint:
+    docker:
+      - image: cimg/node:14.17
+    steps:
+      - attach_workspace:
+          at: .
+      - run:
+          command: cd server && yarn && yarn lint
+          name: '[BE] Run YARN lint'
+  # server_test:
+  #   docker:
+  #     - image: cimg/node:14.17
+  #   steps:
+  #     - attach_workspace:
+  #         at: .
+  #     - run:
+  #         command: cd server && yarn && yarn test
+  #         name: '[BE] Run YARN test'
+workflows:
+  testing-flow:
+    jobs:
+      - client_build
+      - client_lint:
+          requires:
+            - client_build
+      # - client_test:
+      #     requires:
+      #       - client_build
+      - server_build
+      - server_lint:
+          requires:
+            - server_build
+      # - server_test:
+      #     requires:
+      #       - server_build
