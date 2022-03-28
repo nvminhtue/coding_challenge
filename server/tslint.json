@@ -1,0 +1,72 @@
+
+{
+  "defaultSeverity": "error",
+  "extends": ["tslint:recommended", "tslint-eslint-rules"],
+  "linterOptions": {
+    "exclude": [
+      "coverage/*/*",
+      "ormconfig.js"
+    ]
+  },
+  "jsRules": {
+    "no-unused-expression": true
+  },
+  "rules": {
+    "no-empty": [true, "allow-empty-catch"],
+    "no-constant-condition": true,
+    "quotemark": [true, "single"],
+    "member-access": [false],
+    "max-line-length": [true, 100],
+    "member-ordering": [false],
+    "interface-name": [false],
+    "arrow-parens": false,
+    "object-literal-sort-keys": false,
+    "whitespace": [
+      true,
+      "check-branch",
+      "check-decl",
+      "check-operator",
+      "check-module",
+      "check-separator",
+      "check-rest-spread",
+      "check-type",
+      "check-typecast",
+      "check-type-operator",
+      "check-preblock"
+    ],
+    "object-curly-spacing": [true, "always"],
+    "no-multi-spaces": true,
+    "array-bracket-spacing": [true, "never"],
+    "no-unused-variable": [true, {"ignore-pattern": "^_"}],
+    "variable-name": [true, "allow-leading-underscore", "allow-pascal-case"],
+    "ordered-imports": [
+      true,
+      {
+        "module-source-path": "full",
+        "grouped-imports": true,
+        "groups": [
+          {
+            "name": "local import",
+            "match": "^src.*",
+            "order": 2
+          },
+          {
+            "name": "local import",
+            "match": "^test.*",
+            "order": 3
+          },
+          {
+            "name": "relative dir",
+            "match": "^[.].*",
+            "order": 4
+          },
+          {
+            "name": "node_modules",
+            "match": ".*",
+            "order": 1
+          }
+        ]
+      }
+    ]
+  }
+}
