@@ -10,6 +10,15 @@ jobs:
       - node/install:
           install-yarn: true
           node-version: '14.17'
+      - restore_cache:
+          keys:
+          - repo-yarn-{{ checksum "client/yarn.lock" }}
+          - repo-yarn-
+      - run: cd client && yarn install
+      - save_cache:
+          paths:
+            - ~/client/yarn-cache
+          key: repo-yarn-{{ checksum "client/yarn.lock" }}
       - run:
           command: cd client && yarn && yarn build
           name: '[FE] Run YARN build'
@@ -21,6 +30,15 @@ jobs:
       - node/install:
           install-yarn: true
           node-version: '14.17'
+      - restore_cache:
+          keys:
+          - repo-yarn-{{ checksum "client/yarn.lock" }}
+          - repo-yarn-
+      - run: cd client && yarn install
+      - save_cache:
+          paths:
+            - ~/client/yarn-cache
+          key: repo-yarn-{{ checksum "client/yarn.lock" }}
       - run:
           command: cd client && yarn && yarn lint
           name: '[FE] Run YARN lint'
@@ -38,14 +56,22 @@ jobs:
   server_build:
     docker:
       - image: cimg/node:14.17
-    working_directory: ~/server
     steps:
       - checkout
       - node/install:
           install-yarn: true
           node-version: '14.17'
+      - restore_cache:
+          keys:
+          - repo-yarn-{{ checksum "server/yarn.lock" }}
+          - repo-yarn-
+      - run: cd server && yarn install
+      - save_cache:
+          paths:
+            - ~/server/yarn-cache
+          key: repo-yarn-{{ checksum "server/yarn.lock" }}
       - run:
-          command: cd server && yarn && yarn build
+          command: cd server && yarn build
           name: '[BE] Run YARN build'
       - persist_to_workspace:
           root: .
@@ -57,17 +83,41 @@ jobs:
     steps:
       - attach_workspace:
           at: .
+      - restore_cache:
+          keys:
+          - repo-yarn-{{ checksum "server/yarn.lock" }}
+          - repo-yarn-
+      - run: cd server && yarn install
+      - save_cache:
+          paths:
+            - ~/.yarn-cache
+          key: repo-yarn-{{ checksum "server/yarn.lock" }}
       - run:
-          command: cd server && yarn && yarn lint
+          command: cd server && yarn lint
           name: '[BE] Run YARN lint'
   server_test:
     docker:
       - image: cimg/node:14.17
+      - image: circleci/postgres:12.3
+        environment:
+          POSTGRES_USER: postgres
+          POSTGRES_DB: coding_challenge_test
+          POSTGRES_PASSWORD: 123456
     steps:
       - attach_workspace:
           at: .
+      - restore_cache:
+          keys:
+          - repo-yarn-{{ checksum "server/yarn.lock" }}
+          - repo-yarn-
+      - run: cd server && yarn install
+      - save_cache:
+          paths:
+            - ~/.yarn-cache
+          key: repo-yarn-{{ checksum "server/yarn.lock" }}
+      - run: dockerize -wait tcp://localhost:5432 -timeout 1m
       - run:
-          command: cd server && yarn && yarn test
+          command: cd server && yarn m-test:run && yarn test
           name: '[BE] Run YARN test'
 workflows:
   testing-flow:
