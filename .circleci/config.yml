@@ -24,17 +24,17 @@ jobs:
       - run:
           command: cd client && yarn && yarn lint
           name: '[FE] Run YARN lint'
-  # client_test:
-  #   docker:
-  #     - image: cimg/node:14.17
-  #   steps:
-  #     - checkout
-  #     - node/install:
-  #         install-yarn: true
-  #         node-version: '14.17'
-  #     - run:
-  #         command: cd client && yarn && yarn test
-  #         name: '[FE] Run YARN test'
+  client_test:
+    docker:
+      - image: cimg/node:14.17
+    steps:
+      - checkout
+      - node/install:
+          install-yarn: true
+          node-version: '14.17'
+      - run:
+          command: cd client && yarn && yarn test
+          name: '[FE] Run YARN test'
   server_build:
     docker:
       - image: cimg/node:14.17
@@ -60,15 +60,15 @@ jobs:
       - run:
           command: cd server && yarn && yarn lint
           name: '[BE] Run YARN lint'
-  # server_test:
-  #   docker:
-  #     - image: cimg/node:14.17
-  #   steps:
-  #     - attach_workspace:
-  #         at: .
-  #     - run:
-  #         command: cd server && yarn && yarn test
-  #         name: '[BE] Run YARN test'
+  server_test:
+    docker:
+      - image: cimg/node:14.17
+    steps:
+      - attach_workspace:
+          at: .
+      - run:
+          command: cd server && yarn && yarn test
+          name: '[BE] Run YARN test'
 workflows:
   testing-flow:
     jobs:
@@ -76,13 +76,13 @@ workflows:
       - client_lint:
           requires:
             - client_build
-      # - client_test:
-      #     requires:
-      #       - client_build
+      - client_test:
+          requires:
+            - client_build
       - server_build
       - server_lint:
           requires:
             - server_build
-      # - server_test:
-      #     requires:
-      #       - server_build
+      - server_test:
+          requires:
+            - server_build

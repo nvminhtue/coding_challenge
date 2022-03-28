@@ -6,6 +6,7 @@ import { getConnectionOptions } from 'typeorm';
 import { AppConstant } from './constants/app.constant';
 import { LoggerOption } from './logger/logger.option';
 import { QueryLogger } from './logger/query.logger';
+import { UserModule } from './modules/users/user.module';
 
 const ModuleList = {
   API: [
@@ -16,6 +17,7 @@ const ModuleList = {
       }),
       inject: [WINSTON_MODULE_NEST_PROVIDER],
     }),
+    UserModule,
   ]
 }
 

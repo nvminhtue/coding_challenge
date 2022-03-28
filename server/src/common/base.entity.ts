@@ -5,7 +5,7 @@ import {
   UpdateDateColumn,
 } from 'typeorm';
 
-import { EntityConstant } from 'src/constants/entity.constant';
+import { EntityConstant } from '../constants/entity.constant';
 
 export abstract class BaseEntity {
   @PrimaryGeneratedColumn('uuid')
