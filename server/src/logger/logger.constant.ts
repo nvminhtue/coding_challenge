@@ -1,0 +1,18 @@
+export const LoggerConstant = {
+  BadRequest: 'Completed 400 Bad Request',
+  Unauthorized: 'Completed 401 Unauthorized',
+  Forbidden: 'Completed 403 Forbidden',
+  NotFound: 'Completed 404 Found',
+  Success: 'Complete 200 OK',
+  QueryPrefix: 'Query: ',
+  QueryFailed: 'Completed 400 Query Failed',
+  ParameterPrefix: ' -- PARAMETERS: ',
+  QueryLogLevels: ['log', 'warn', 'query', 'schema', 'migration'],
+  InfoLevel: 'info',
+  ErrorLevel: 'error',
+  StorageDirname: 'logs',
+  MaxFiles: 15,
+  FileName: `${process.env.NODE_ENV}-%DATE%.log`,
+  UncaughtException: 'UncaughtException',
+  UnhandledRejection: 'UnhandledRejection',
+};
