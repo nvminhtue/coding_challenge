@@ -8,5 +8,5 @@ export const AppConstant = {
 };
 
 export const PathConstant = {
-  SampleRoute: '/samples',
+  UserPath: '/users',
 }
