@@ -10,6 +10,7 @@ import { EntityNotFoundExceptionFilter } from './filters/entity-not-found-except
 import { InternalServerExceptionFilter } from './filters/internal-server-exception.filter';
 import { PageNotFoundExceptionFilter } from './filters/page-not-found-exception.filter';
 import { QueryFailedErrorFilter } from './filters/query-failed-exception.filter';
+import { UnauthroziedExceptionFilter } from './filters/unauthorized-exception.filter';
 import { LoggerOption } from './logger/logger.option';
 import { ProcessLogger } from './logger/process.logger';
 import { RequestLogger } from './logger/request.logger';
@@ -33,6 +34,7 @@ async function bootstrap() {
   );
   app.useGlobalFilters(
     new InternalServerExceptionFilter(app.get(WINSTON_MODULE_NEST_PROVIDER)),
+    new UnauthroziedExceptionFilter(app.get(WINSTON_MODULE_NEST_PROVIDER)),
     new BadRequestExceptionFilter(app.get(WINSTON_MODULE_NEST_PROVIDER)),
     new PageNotFoundExceptionFilter(app.get(WINSTON_MODULE_NEST_PROVIDER)),
     new QueryFailedErrorFilter(app.get(WINSTON_MODULE_NEST_PROVIDER)),

@@ -1,4 +1,4 @@
-import { plainToInstance } from 'class-transformer';
+import { plainToClass } from 'class-transformer';
 import camelCase from 'lodash/camelCase';
 import includes from 'lodash/includes';
 import { EntityNotFoundError } from 'typeorm';
@@ -39,7 +39,7 @@ export class ErrorUtil {
     if (codeAndMessage instanceof Function) {
       codeAndMessage = codeAndMessage(payload);
     }
-    return plainToInstance(ErrorDTO, { entity, property, ...codeAndMessage });
+    return plainToClass(ErrorDTO, { entity, property, ...codeAndMessage });
   }
 
   static queryFailedError(exception, errorCode: number, entity: string): ErrorDTO {
@@ -50,7 +50,7 @@ export class ErrorUtil {
           .split(', ')
           .pop());
         const { code, message } = ErrorTypesConstant.uniqueViolation;
-        return plainToInstance(ErrorDTO, { code, message, entity, property });
+        return plainToClass(ErrorDTO, { code, message, entity, property });
     }
   }
 
@@ -59,12 +59,12 @@ export class ErrorUtil {
     const property = ErrorConstant.ErrorOnPrimaryKey;
     const { code, message } = ErrorTypesConstant.entityNotFound;
 
-    return plainToInstance(ErrorDTO, { entity, property, code, message });
+    return plainToClass(ErrorDTO, { entity, property, code, message });
   }
 
   static internalServerError(): ErrorDTO {
     const { code, message } = ErrorTypesConstant.internalServer;
 
-    return plainToInstance(ErrorDTO, { code, message });
+    return plainToClass(ErrorDTO, { code, message });
   }
 }

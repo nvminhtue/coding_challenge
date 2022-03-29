@@ -5,6 +5,7 @@ import {
   ValidationPipe,
 } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
+import cookieParser from 'cookie-parser';
 import 'module-alias/register';
 import { WINSTON_MODULE_NEST_PROVIDER } from 'nest-winston';
 import request from 'supertest';
@@ -16,6 +17,7 @@ import { EntityNotFoundExceptionFilter } from 'src/filters/entity-not-found-exce
 import { InternalServerExceptionFilter } from 'src/filters/internal-server-exception.filter';
 import { PageNotFoundExceptionFilter } from 'src/filters/page-not-found-exception.filter';
 import { QueryFailedErrorFilter } from 'src/filters/query-failed-exception.filter';
+import { UnauthroziedExceptionFilter } from 'src/filters/unauthorized-exception.filter';
 import { ProcessLogger } from 'src/logger/process.logger';
 import { RequestLogger } from 'src/logger/request.logger';
 import { ResponseLogger } from 'src/logger/response.logger';
@@ -46,11 +48,13 @@ export const initApp = async () => {
   app.useGlobalInterceptors(new ResponseLogger(app.get(WINSTON_MODULE_NEST_PROVIDER)));
   app.useGlobalFilters(
     new InternalServerExceptionFilter(app.get(WINSTON_MODULE_NEST_PROVIDER)),
+    new UnauthroziedExceptionFilter(app.get(WINSTON_MODULE_NEST_PROVIDER)),
     new BadRequestExceptionFilter(app.get(WINSTON_MODULE_NEST_PROVIDER)),
     new PageNotFoundExceptionFilter(app.get(WINSTON_MODULE_NEST_PROVIDER)),
     new QueryFailedErrorFilter(app.get(WINSTON_MODULE_NEST_PROVIDER)),
     new EntityNotFoundExceptionFilter(app.get(WINSTON_MODULE_NEST_PROVIDER)),
   );
+  app.use(cookieParser());
 
   ProcessLogger(app.get(WINSTON_MODULE_NEST_PROVIDER));
 
@@ -62,26 +66,44 @@ export const closeApp = async (app: INestApplication) => {
   app.close();
 };
 
+export const getSession = async (app: INestApplication, user: UserEntity): Promise<string> => {
+  const jwt = user.refreshToken;
+
+  const response = await request(app.getHttpServer())
+    .post('/login')
+    .set('Cookie', `refreshToken=${jwt}`)
+    .send({
+      email: user.email,
+      password: user.password,
+    });
+
+  return response.body.accessToken
+};
+
 export const getResponse = async (
   app: INestApplication,
   method: string,
   path: string,
+  session = '',
   param: any = {},
-  xhr = false,
 ) => {
   trackingResponse.mockClear();
 
   const response = await request(app.getHttpServer())
   [method](path)
-    .set('x-requested-with', xhr ? 'XMLHttpRequest' : null)
+    .set('authorization', session)
     .send(param);
 
   return [response.status, JSON.parse(response.text)];
 };
 
-export const formatError = (
+export const formatFullError = (
   code: number,
   message: string,
   property = null,
   entity = null,
 ) => ({ entity, property, code, message })
+
+export const formatError = (message: string, property = null) => {
+  return [{ message, property }];
+};

@@ -9,4 +9,7 @@ export const AppConstant = {
 
 export const PathConstant = {
   UserPath: '/users',
+  LoginPath: '/login',
+  LogoutPath: '/logout',
+  RootPath: '/',
 }
