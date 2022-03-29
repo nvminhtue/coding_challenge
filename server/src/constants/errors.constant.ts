@@ -15,6 +15,30 @@ export const ErrorTypesConstant = {
     code: 2003,
     message: 'Not UUID',
   },
+  isNotEmpty: {
+    code: 2004,
+    message: 'This field can not be empty',
+  },
+  isString: {
+    code: 2005,
+    message: 'This field must have string type',
+  },
+  maxLength: {
+    code: 2006,
+    message: 'This field exceed allowed characters',
+  },
+  isEmail: {
+    code: 2007,
+    message: 'This field must have email type',
+  },
+  isPasswordConfirmation: {
+    code: 2008,
+    message: 'Confirm password should be matched with password',
+  },
+  isWrongPassword: {
+    code: 2009,
+    message: 'Wrong password',
+  },
 };
 
 export const TableNameMappingConstant = {
@@ -22,13 +46,14 @@ export const TableNameMappingConstant = {
 };
 
 export const ErrorLevelsConstant = {
-  High: ['internalServer'],
+  High: ['internalServer', 'isNotEmpty'],
   Medium: [
     'forbidden',
     'pageNotFound',
     'somethingWrong',
+    'isString',
+    'isInt'
   ],
-  Low: ['isNotEmpty']
 };
 
 export const DatabaseErrorCode = {
@@ -42,9 +67,11 @@ export const ErrorConstant = {
   GetEntityInMessageRegex: /(\w+)Entity/g,
   Property: {
     Id: 'id',
+    Password: 'password'
   },
   Type: {
-    isNotUUID: 'isNotUUID',
+    IsNotUUID: 'isNotUUID',
+    IsWrongPassword: 'isWrongPassword',
   }
 };
 

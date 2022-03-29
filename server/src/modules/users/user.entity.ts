@@ -1,7 +1,7 @@
 import { Column, Entity, Unique } from 'typeorm';
 
-import { BaseEntity } from 'src/common/base.entity';
-import { EntityConstant } from 'src/constants/entity.constant';
+import { BaseEntity } from '../../common/base.entity';
+import { EntityConstant } from '../../constants/entity.constant';
 
 @Entity('users')
 @Unique(['username'])
@@ -38,4 +38,11 @@ export class UserEntity extends BaseEntity {
     length: EntityConstant.ShortLength,
   })
   email: string;
+
+  @Column({
+    type: 'text',
+    name: 'refresh_token',
+    nullable: true,
+  })
+  refreshToken: string;
 }
