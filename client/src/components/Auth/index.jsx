@@ -1,8 +1,8 @@
 import { useState } from 'react';
 
+import * as Styled from './styled';
 import LoginForm from '../Login/Login.container'
 import RegisterForm from '../Register/Register.container'
-import * as Styled from './styled';
 
 import './index.css'
 

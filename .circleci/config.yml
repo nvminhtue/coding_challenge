@@ -126,9 +126,9 @@ workflows:
       - client_lint:
           requires:
             - client_build
-      - client_test:
-          requires:
-            - client_build
+      # - client_test:
+      #     requires:
+      #       - client_build
       - server_build
       - server_lint:
           requires:
