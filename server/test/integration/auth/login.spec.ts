@@ -5,7 +5,7 @@ import { getRepository } from 'typeorm';
 import { createUser } from 'src/database/factory/user.factory';
 import { UserEntity } from 'src/modules/users/user.entity';
 
-import { closeApp, formatError, getResponse, initApp } from 'test/helpers/test.helper';
+import { closeApp, formatError, formatFullError, getResponse, initApp } from 'test/helpers/test.helper';
 
 describe('Login', () => {
   let app: INestApplication;
@@ -142,7 +142,9 @@ describe('Login', () => {
       expect(status).to.equal(400);
       expect(data.errors[0]).to.eql(errors[0]);
     })
+  });
 
+  describe('Failure caused by wrong email or password', () => {
     it('should return error when password is not matched', async () => {
       variables.password = 'wrongpassword';
       const [status, data] = await getResponse(
@@ -152,9 +154,37 @@ describe('Login', () => {
         '',
         variables,
       );
+      const errors = formatFullError(
+        2009,
+        'Email or password is incorrect',
+        'emailOrPassword',
+        'UserEntity',
+      );
+
       expect(status).to.equal(400);
-      expect(data.errors.message).to.equal('Wrong password');
-      expect(data.errors.property).to.equal('password');
+      expect(data.errors.message).to.equal('Email or password is incorrect');
+      expect(data.errors).to.eql(errors);
     })
-  });
+
+    it('should return error when email is not matched', async () => {
+      variables.email = 'wrongemail@email.com';
+      const [status, data] = await getResponse(
+        app,
+        'post',
+        '/login',
+        '',
+        variables,
+      );
+      const errors = formatFullError(
+        2009,
+        'Email or password is incorrect',
+        'emailOrPassword',
+        'UserEntity',
+      );
+
+      expect(status).to.equal(400);
+      expect(data.errors.message).to.equal('Email or password is incorrect');
+      expect(data.errors).to.eql(errors);
+    })
+  })
 })

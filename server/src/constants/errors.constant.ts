@@ -37,7 +37,7 @@ export const ErrorTypesConstant = {
   },
   isWrongPassword: {
     code: 2009,
-    message: 'Wrong password',
+    message: 'Email or password is incorrect',
   },
 };
 
@@ -67,7 +67,8 @@ export const ErrorConstant = {
   GetEntityInMessageRegex: /(\w+)Entity/g,
   Property: {
     Id: 'id',
-    Password: 'password'
+    Password: 'password',
+    EmailOrPassword: 'emailOrPassword'
   },
   Type: {
     IsNotUUID: 'isNotUUID',

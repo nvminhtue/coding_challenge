@@ -1,14 +1,14 @@
-import axios, { AxiosInstance, AxiosRequestConfig } from 'axios';
+import axios from 'axios';
 import { toast } from 'react-toastify';
 
-import { ROUTES } from 'resources/utils/constants';
-import history from 'services/history';
-import isUndefinedOrNull from 'utils/helpers/isUndefinedOrNull';
+import { ROUTES } from '../../../resources/utils/constants';
+import history from '../../../services/history';
+import isUndefinedOrNull from '../../../utils/helpers/isUndefinedOrNull';
 
 import { ERROR_CODES } from './constants';
 
-const axiosConfig: AxiosRequestConfig = {
-  baseURL: `${process.env.NEXT_PUBLIC_SERVER_URL}`,
+const axiosConfig = {
+  baseURL: `${process.env.REACT_APP_SERVER_URL}`,
   timeout: 120000,
   withCredentials: true,
   headers: {
@@ -16,7 +16,7 @@ const axiosConfig: AxiosRequestConfig = {
   },
 };
 
-const appAxios: AxiosInstance = axios.create(axiosConfig);
+const appAxios = axios.create(axiosConfig);
 
 appAxios.interceptors.request.use(
   config => {
@@ -54,7 +54,7 @@ appAxios.interceptors.response.use(
   },
 );
 
-function setAppAxiosHeader(key: string, value: string): void {
+function setAppAxiosHeader(key, value) {
   if (isUndefinedOrNull(key)) return;
 
   if (isUndefinedOrNull(value)) {
