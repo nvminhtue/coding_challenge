@@ -8,6 +8,10 @@ export class AuthService extends RestService {
   register(data) {
     return this.post({ url: '/register', data }, { enableFlashMessageOnSuccess: true });
   }
+
+  refreshToken() {
+    return this.get({ url: '/token' });
+  }
 }
 
 export const AuthApi = new AuthService();

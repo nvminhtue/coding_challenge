@@ -1,8 +1,7 @@
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
 
-import Dashboard from './components/Dashboard';
+import Dashboard from './components/Dashboard/Dashboard.container';
 import Auth from './components/Auth';
-import Navbar from './components/Navbar';
 import { MainToast } from './components/common/Toast';
 import history from './services/history';
 
@@ -13,10 +12,7 @@ function App() {
     <BrowserRouter history={history}>
       <Switch>
         <Route exact path='/' component={Auth} />
-        <Route path='/dashboard'>
-          <Navbar />
-          <Dashboard />
-        </Route>
+        <Route path='/dashboard' component={Dashboard} />
       </Switch>
       <MainToast />
     </BrowserRouter>
