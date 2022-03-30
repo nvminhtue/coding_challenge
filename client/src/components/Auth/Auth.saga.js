@@ -7,6 +7,7 @@ import {
 
 import {
   login,
+  refreshToken,
   register,
   saveLoginInfo
 } from './Auth.action';
@@ -27,9 +28,14 @@ export function* registerSaga(action) {
   }
 }
 
+export function* refreshTokenSaga() {
+  yield call([AuthApi, AuthApi.refreshToken]);
+}
+
 export default function* authSaga() {
   yield all([
     takeLatest(login, loginSaga),
     takeLatest(register, registerSaga),
+    takeLatest(refreshToken, refreshTokenSaga),
   ]);
 }

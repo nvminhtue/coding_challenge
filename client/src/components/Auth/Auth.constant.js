@@ -4,6 +4,7 @@ export const ActionTypes = keyMirror({
   REGISTER: undefined,
   LOGIN: undefined,
   SAVE_LOGIN_INFO: undefined,
+  REFRESH_TOKEN: undefined,
 });
 
 export const AuthConstant = {

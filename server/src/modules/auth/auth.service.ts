@@ -1,6 +1,7 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import { BadRequestException, ForbiddenException, Injectable, UnauthorizedException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import bcrypt from 'bcrypt';
+import { Response } from 'express';
 import jwt from 'jsonwebtoken';
 import { Repository } from 'typeorm';
 
@@ -87,5 +88,46 @@ export class AuthService {
         refreshToken: null,
       })
     }
+  }
+
+  async refreshToken(refreshToken: string, res: Response): Promise<string> {
+    let accessToken;
+
+    if (!refreshToken) {
+      this.clearCookie(res);
+      throw new UnauthorizedException();
+    }
+
+    const user = await this.userRepo
+      .createQueryBuilder()
+      .where({
+        refreshToken
+      })
+      .getOne()
+    if (!user) {
+      this.clearCookie(res);
+      throw new ForbiddenException();
+    }
+
+    jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET, (err) => {
+      if (err) {
+        this.clearCookie(res);
+        throw new ForbiddenException();
+      }
+
+      const userId = user.id;
+      const name = user.name;
+      const email = user.email;
+      accessToken = jwt.sign({ userId, name, email }, process.env.ACCESS_TOKEN_SECRET, {
+        expiresIn: '1d'
+      });
+    });
+
+    return accessToken;
+  }
+
+  clearCookie(res: Response): void {
+    res.clearCookie('refreshToken')
+    res.clearCookie('accessToken');
   }
 }

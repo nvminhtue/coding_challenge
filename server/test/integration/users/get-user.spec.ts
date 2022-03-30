@@ -7,7 +7,7 @@ import { UserEntity } from 'src/modules/users/user.entity';
 
 import { closeApp, formatFullError, getResponse, getSession, initApp } from 'test/helpers/test.helper';
 
-describe('Query specific item of sample entity', () => {
+describe('Query specific item of user entity', () => {
   let app: INestApplication;
   let user: UserEntity;
   let session: string;

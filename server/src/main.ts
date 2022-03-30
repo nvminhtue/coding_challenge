@@ -1,6 +1,7 @@
 import { BadRequestException, ValidationError, ValidationPipe } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 import { NestExpressApplication } from '@nestjs/platform-express';
+import cookieParser from 'cookie-parser';
 import 'module-alias/register';
 import { WinstonModule, WINSTON_MODULE_NEST_PROVIDER } from 'nest-winston';
 
@@ -43,6 +44,7 @@ async function bootstrap() {
   app.useGlobalGuards(new RequestLogger(app.get(WINSTON_MODULE_NEST_PROVIDER)));
   app.useGlobalInterceptors(new ResponseLogger(app.get(WINSTON_MODULE_NEST_PROVIDER)));
   app.use(CurrentContext.middleware);
+  app.use(cookieParser());
 
   ProcessLogger(app.get(WINSTON_MODULE_NEST_PROVIDER));
   await app.listen(process.env.PORT, process.env.APP_DOMAIN);

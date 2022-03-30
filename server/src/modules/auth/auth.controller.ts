@@ -1,4 +1,4 @@
-import { Body, Controller, Post, Req, Res } from '@nestjs/common';
+import { Body, Controller, Get, Post, Req, Res } from '@nestjs/common';
 import { plainToClass } from 'class-transformer';
 import { Request, Response } from 'express';
 import get from 'lodash/get';
@@ -13,7 +13,19 @@ import { AuthService } from './auth.service';
 export class AuthController {
   constructor(
     private readonly authService: AuthService,
-  ) {}
+  ) { }
+
+  @Get('/token')
+  async refreshToken(
+    @Res() res: Response,
+    @Req() req: Request,
+  ) {
+    const refreshToken = req.cookies.refreshToken;
+
+    const accessToken = await this.authService.refreshToken(refreshToken, res);
+
+    res.json({ accessToken });
+  }
 
   @Post('/register')
   async register(
@@ -35,6 +47,7 @@ export class AuthController {
       httpOnly: true,
       maxAge: UserConstant.MaxAge,
     });
+    res.cookie('accessToken', accessToken);
     res.json({ accessToken });
   }
 
@@ -48,7 +61,7 @@ export class AuthController {
     const accessToken = get(req, 'headers.authorization');
     if (accessToken) {
       await this.authService.logout(accessToken);
-      res.clearCookie('refreshToken');
+      this.authService.clearCookie(res);
       return res.status(200).json({});
     }
   }

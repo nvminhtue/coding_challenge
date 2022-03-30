@@ -1,6 +1,7 @@
 import axios from 'axios';
 import { toast } from 'react-toastify';
 
+import { getToken } from '../utils/helpers';
 import { ROUTES } from '../../../resources/utils/constants';
 import history from '../../../services/history';
 import isUndefinedOrNull from '../../../utils/helpers/isUndefinedOrNull';
@@ -20,6 +21,10 @@ const appAxios = axios.create(axiosConfig);
 
 appAxios.interceptors.request.use(
   config => {
+    const token = getToken();
+    if (token) {
+      config.headers['authorization'] = `Bearer ${token}`;
+    }
     // config some headers if needed
     return config;
   },
