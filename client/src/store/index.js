@@ -1,21 +1,15 @@
 import { compose, createStore, applyMiddleware } from 'redux';
-import { persistStore, persistReducer, PersistConfig } from 'redux-persist';
+import { persistStore, persistReducer } from 'redux-persist';
 import autoMergeLevel2 from 'redux-persist/lib/stateReconciler/autoMergeLevel2';
 import storage from 'redux-persist/lib/storage';
 import createSagaMiddleware from 'redux-saga';
 
-import rootReducer, { RootState } from '../reducers/rootReducer';
+import rootReducer from '../reducers/rootReducer';
 import rootSaga from '../sagas/rootSaga';
-
-declare global {
-  interface Window {
-    __REDUX_DEVTOOLS_EXTENSION_COMPOSE__?: typeof compose;
-  }
-}
 
 export const PERSIST_KEY = 'root';
 
-const persistConfig: PersistConfig<RootState> = {
+const persistConfig = {
   key: PERSIST_KEY,
   storage,
   stateReconciler: autoMergeLevel2,
@@ -25,14 +19,14 @@ const persistConfig: PersistConfig<RootState> = {
 const sagaMiddleware = createSagaMiddleware();
 
 const configDevStore = () => createStore(
-  persistReducer<RootState, any>(persistConfig, rootReducer),
+  persistReducer(persistConfig, rootReducer),
   ((typeof window !== 'undefined' && window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__) || compose)(
     applyMiddleware(sagaMiddleware),
   ),
 );
 
 const configProdStore = () => createStore(
-  persistReducer<RootState, any>(persistConfig, rootReducer),
+  persistReducer(persistConfig, rootReducer),
   applyMiddleware(sagaMiddleware),
 );
 

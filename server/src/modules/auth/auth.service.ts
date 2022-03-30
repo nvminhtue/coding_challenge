@@ -39,15 +39,18 @@ export class AuthService {
   }
 
   async login(loginDTO: LoginDTO): Promise<[string, string]> {
+    let isMatchedPassword = false;
     const { password, email } = loginDTO;
-    const user = await this.userService.findUser({ email });
-    const isMatchedPassword = await bcrypt.compare(password, user.password);
+    const user = await this.userRepo.createQueryBuilder().where({ email }).getOne();
+    if (user) {
+      isMatchedPassword = await bcrypt.compare(password, user.password);
+    }
 
-    if (!isMatchedPassword) {
+    if (!isMatchedPassword || !user) {
       throw new BadRequestException(
         ErrorUtil.badRequest(
           ErrorConstant.Type.IsWrongPassword,
-          ErrorConstant.Property.Password,
+          ErrorConstant.Property.EmailOrPassword,
           UserEntity.name,
         ),
       );

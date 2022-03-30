@@ -1,4 +1,3 @@
-import { AxiosError, AxiosRequestConfig, AxiosResponse } from 'axios';
 import get from 'lodash/get';
 import qs from 'qs';
 import { toast } from 'react-toastify';
@@ -7,22 +6,22 @@ import appAxios from '../appAxios';
 import responseErrorFormatter from '../utils/responseErrorFormatter';
 
 class RestService {
-  axios: typeof appAxios;
-  options: any;
+  axios;
+  options;
   constructor(instance = appAxios) {
     this.axios = instance;
   }
 
-  get(request: AxiosRequestConfig, options = {}) {
+  get(request, options = {}) {
     this.options = options;
     return this.execute({
       method: 'get',
-      paramsSerializer: (params: any) => qs.stringify(params, { arrayFormat: 'indices' }),
+      paramsSerializer: (params) => qs.stringify(params, { arrayFormat: 'indices' }),
       ...request,
     });
   }
 
-  post(request: AxiosRequestConfig, options = {}) {
+  post(request, options = {}) {
     this.options = {
       enableFlashMessageOnSuccess: false,
       enableFlashMessageOnError: true,
@@ -31,7 +30,7 @@ class RestService {
     return this.execute({ method: 'post', ...request });
   }
 
-  put(request: AxiosRequestConfig, options = {}) {
+  put(request, options = {}) {
     this.options = {
       enableFlashMessageOnSuccess: false,
       enableFlashMessageOnError: true,
@@ -40,11 +39,11 @@ class RestService {
     return this.execute({ method: 'put', ...request });
   }
 
-  patch(request: AxiosRequestConfig) {
+  patch(request) {
     return this.execute({ method: 'patch', ...request });
   }
 
-  delete(request: AxiosRequestConfig, options = {}) {
+  delete(request, options = {}) {
     this.options = {
       enableFlashMessageOnSuccess: true,
       enableFlashMessageOnError: true,
@@ -53,16 +52,16 @@ class RestService {
     return this.execute({ method: 'delete', ...request });
   }
 
-  async execute(request: AxiosRequestConfig) {
+  async execute(request) {
     try {
       const response = await this.axios(request);
       return this.successHandler(response);
     } catch (error) {
-      return this.failureHandler(error as AxiosError);
+      return this.failureHandler(error);
     }
   }
 
-  successHandler(response: AxiosResponse) {
+  successHandler(response) {
     if (this.options?.enableFlashMessageOnSuccess) {
       const message = response.data?.message ?? response.data?.data?.message;
 
@@ -72,19 +71,17 @@ class RestService {
     return response.data ?? {};
   }
 
-  failureHandler(error: AxiosError) {
+  failureHandler(error) {
     const formattedError = responseErrorFormatter({
       data: get(error, 'response.data'),
       status: get(error, 'response.status'),
     });
 
     if (this.options?.enableFlashMessageOnError) {
-      const message = formattedError.errorDescription;
+      const message = formattedError.errorMessage;
 
       if (message) toast.error(message, { autoClose: 5000 });
     }
-
-    return Promise.reject(formattedError);
   }
 }
 
