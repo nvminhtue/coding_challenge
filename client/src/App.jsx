@@ -6,6 +6,8 @@ import { MainToast } from './components/common/Toast';
 import history from './services/history';
 
 import 'react-toastify/dist/ReactToastify.css';
+import 'react-pagination-bar/dist/index.css'
+import '@fortawesome/fontawesome-free/css/all.min.css';
 
 function App() {
   return (

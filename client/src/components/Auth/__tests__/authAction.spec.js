@@ -1,4 +1,4 @@
-import { login, refreshToken, register, saveLoginInfo } from '../Auth.action';
+import { login, logout, refreshToken, register, saveLoginInfo } from '../Auth.action';
 import { ActionTypes } from '../Auth.constant';
 
 describe('Auth Actions', () => {
@@ -42,6 +42,13 @@ describe('Auth Actions', () => {
     const actionReturnValue = refreshToken();
 
     expect(actionReturnValue.type).toEqual(ActionTypes.REFRESH_TOKEN);
+    expect(actionReturnValue.payload).toEqual();
+  });
+
+  it('should create logout action', () => {
+    const actionReturnValue = logout();
+
+    expect(actionReturnValue.type).toEqual(ActionTypes.LOGOUT);
     expect(actionReturnValue.payload).toEqual();
   });
 });

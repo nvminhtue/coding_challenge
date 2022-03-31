@@ -8,3 +8,14 @@ body {
 	font-family: 'Jost', sans-serif;
 	background: linear-gradient(to bottom, #0f0c29, #302b63, #24243e);
 }
+table {
+	border-spacing: 0;
+}
+
+.rpb-item--active {
+	background-color: #FF8200 !important;
+}
+
+.rpb-progress {
+	background-color: #FF8200 !important;
+}

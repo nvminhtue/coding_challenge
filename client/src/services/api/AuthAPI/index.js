@@ -12,6 +12,10 @@ export class AuthService extends RestService {
   refreshToken() {
     return this.get({ url: '/token' });
   }
+
+  logout() {
+    return this.post({ url: '/logout' });
+  }
 }
 
 export const AuthApi = new AuthService();

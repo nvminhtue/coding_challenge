@@ -7,17 +7,17 @@ import {
 
 import {
   login,
+  logout,
   refreshToken,
   register,
-  saveLoginInfo
+  saveLoginInfo,
 } from './Auth.action';
 import { AuthApi } from '../../services/api/AuthAPI';
 
 export function* loginSaga(action) {
   const { payload: { values, meta: { history } } } = action;
   const result = yield call([AuthApi, AuthApi.login], values);
-  yield put(saveLoginInfo({ accessToken: result.accessToken }));
-  history.push('/dashboard')
+  if (result) history.push('/dashboard')
 }
 
 export function* registerSaga(action) {
@@ -26,6 +26,16 @@ export function* registerSaga(action) {
   if (result) {
     handleSwitchForm(true);
   }
+}
+
+export function* logoutSaga(action) {
+  const { payload: { meta: { history } } } = action;
+  yield call([AuthApi, AuthApi.logout]);
+  yield put(saveLoginInfo({
+    userId: '',
+    username: '',
+  }))
+  history.push('/')
 }
 
 export function* refreshTokenSaga() {
@@ -37,5 +47,6 @@ export default function* authSaga() {
     takeLatest(login, loginSaga),
     takeLatest(register, registerSaga),
     takeLatest(refreshToken, refreshTokenSaga),
+    takeLatest(logout, logoutSaga),
   ]);
 }
