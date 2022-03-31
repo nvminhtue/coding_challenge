@@ -30,10 +30,14 @@ export class AuthController {
   @Post('/register')
   async register(
     @Body() registerDTO: RegisterDTO,
+    @Res() res: Response,
   ): Promise<UserDTO> {
     const user = await this.authService.register(registerDTO);
 
-    return plainToClass(UserDTO, user);
+    const result = plainToClass(UserDTO, user);
+
+    res.status(201).json({ ...result, message: 'Registration sucessfully' })
+    return result;
   }
 
   @Post('/login')
@@ -56,9 +60,7 @@ export class AuthController {
     @Res() res: Response,
     @Req() req: Request,
   ): Promise<Response> {
-    // const refreshToken = get(req, 'cookies.refreshToken');
-    // if (refreshToken) {
-    const accessToken = get(req, 'headers.authorization');
+    const accessToken = get(req, 'headers.authorization')?.split('Bearer ')[1]
     if (accessToken) {
       await this.authService.logout(accessToken);
       this.authService.clearCookie(res);

@@ -3,7 +3,8 @@ import { handleActions } from 'redux-actions';
 import { saveLoginInfo } from './Auth.action';
 
 export const initialState = {
-  accessToken: ''
+  userId: '',
+  username: '',
 };
 
 export default handleActions({

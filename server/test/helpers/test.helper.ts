@@ -77,7 +77,7 @@ export const getSession = async (app: INestApplication, user: UserEntity): Promi
       password: user.password,
     });
 
-  return response.body.accessToken
+  return `Bearer ${response.body.accessToken}`
 };
 
 export const getResponse = async (

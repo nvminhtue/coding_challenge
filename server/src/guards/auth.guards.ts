@@ -16,7 +16,7 @@ export class AuthGuard implements CanActivate {
     const response = http.getResponse();
 
     response.setHeader('Cache-Control', 'no-store');
-    const token = get(request, 'headers.authorization');
+    const token = get(request, 'headers.authorization')?.split('Bearer ')[1];
     if (!token) {
       throw new UnauthorizedException();
     }
