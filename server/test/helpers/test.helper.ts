@@ -21,11 +21,16 @@ import { UnauthroziedExceptionFilter } from 'src/filters/unauthorized-exception.
 import { ProcessLogger } from 'src/logger/process.logger';
 import { RequestLogger } from 'src/logger/request.logger';
 import { ResponseLogger } from 'src/logger/response.logger';
+import { SearchResultEntity } from 'src/modules/search-results/search-result.entity';
+import { SearchTaskService } from 'src/modules/search-tasks/search-task.service';
+import { UserSearchEntity } from 'src/modules/user-searches/user-search.entity';
 import { UserEntity } from 'src/modules/users/user.entity';
 
 const trackingResponse = jest.fn().mockReturnValue(true);
 
 const clearDatabase = async () => {
+  await getRepository(SearchResultEntity).delete({});
+  await getRepository(UserSearchEntity).delete({});
   await getRepository(UserEntity).delete({});
 };
 
@@ -57,6 +62,10 @@ export const initApp = async () => {
   app.use(cookieParser());
 
   ProcessLogger(app.get(WINSTON_MODULE_NEST_PROVIDER));
+
+  const searchTaskService = await app.get(SearchTaskService);
+  await searchTaskService.queue.pause(false);
+  jest.spyOn(searchTaskService, 'fetchTask').mockResolvedValue(Promise.resolve());
 
   return app.init();
 };

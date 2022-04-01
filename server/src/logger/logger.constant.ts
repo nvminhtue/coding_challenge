@@ -15,4 +15,5 @@ export const LoggerConstant = {
   FileName: `${process.env.NODE_ENV}-%DATE%.log`,
   UncaughtException: 'UncaughtException',
   UnhandledRejection: 'UnhandledRejection',
+  BackgroundJobContext: 'BackgroundJob',
 };

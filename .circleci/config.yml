@@ -98,6 +98,7 @@ jobs:
   server_test:
     docker:
       - image: cimg/node:14.17
+      - image: cimg/redis:6.2.6
       - image: circleci/postgres:12.3
         environment:
           POSTGRES_USER: postgres
