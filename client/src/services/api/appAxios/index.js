@@ -39,30 +39,27 @@ appAxios.interceptors.response.use(
       return Promise.reject();
     }
 
-    const { statusCode, message } = error.response.data?.errors ?? {};
+    const { statusCode } = error.response.data?.errors ?? {};
 
     switch (statusCode.toString() || error.response.status?.toString()) {
-    case ERROR_CODES.INTERNAL_SERVER_ERROR:
-      history.push(ROUTES.INTERNAL_SERVER_ERROR);
-      break;
+      case ERROR_CODES.INTERNAL_SERVER_ERROR:
+        history.push(ROUTES.INTERNAL_SERVER_ERROR);
+        break;
 
-    case ERROR_CODES.MODEL_NOT_FOUND:
-      history.replace(ROUTES.ROOT);
-      toast.error(message, { autoClose: 5000 });
-      break;
+      case ERROR_CODES.MODEL_NOT_FOUND:
+        history.replace(ROUTES.ROOT);
+        break;
 
-    case ERROR_CODES.UNAUTHORIZED:
-      window.location.replace(ROUTES.ROOT);
-      toast.error(message, { autoClose: 5000 });
-      break;
+      case ERROR_CODES.UNAUTHORIZED:
+        window.location.replace(ROUTES.ROOT);
+        break;
 
-    case ERROR_CODES.FORBIDDEN:
-      window.location.replace(ROUTES.ROOT);
-      toast.error(message, { autoClose: 5000 });
-      break;
+      case ERROR_CODES.FORBIDDEN:
+        window.location.replace(ROUTES.ROOT);
+        break;
 
-    default:
-      break;
+      default:
+        break;
     }
 
     return Promise.reject(error);

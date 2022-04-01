@@ -10,13 +10,14 @@ import { getToken } from '../../services/api/utils/helpers'
 
 const Dashboard = (props) => {
   useEffect(() => {
-    props.refreshToken();
     const token = getToken();
     if (!token) {
-      props.history.push('/');
+      const retryToken  = props.refreshToken();
+      if (!retryToken) props.history.push('/');
+    } else {
+      const { userId, username } = jwtDecode(token);
+      props.saveLoginInfo({ userId, username })
     }
-    const { userId, username } = jwtDecode(token);
-    props.saveLoginInfo({ userId, username })
   }, [props]);
 
 

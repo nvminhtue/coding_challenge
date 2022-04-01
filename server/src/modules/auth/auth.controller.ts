@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Post, Req, Res } from '@nestjs/common';
+import { Body, Controller, Get, HttpStatus, Post, Req, Res } from '@nestjs/common';
 import { plainToClass } from 'class-transformer';
 import { Request, Response } from 'express';
 import get from 'lodash/get';
@@ -36,7 +36,7 @@ export class AuthController {
 
     const result = plainToClass(UserDTO, user);
 
-    res.status(201).json({ ...result, message: 'Registration sucessfully' })
+    res.status(HttpStatus.CREATED).json({ ...result, message: 'Registration sucessfully' })
     return result;
   }
 
@@ -64,7 +64,7 @@ export class AuthController {
     if (accessToken) {
       await this.authService.logout(accessToken);
       this.authService.clearCookie(res);
-      return res.status(200).json({});
+      return res.status(HttpStatus.OK).json({});
     }
   }
 }

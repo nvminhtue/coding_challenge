@@ -14,7 +14,7 @@ const NavBar = ({ username, toggle, handleToggle, handleLogout }) => {
         <Styled.Logo src={logo} alt='logo' />
       </Styled.LogoContainer>
       <Styled.UserInfoContainer>
-        <Styled.UserAvatar name={username} color={'#FF8200'} size="40" round={true} onClick={handleToggle} />
+        <Styled.UserAvatar name={username} color={'#FF8200'} size="40" textSizeRatio={1.5} round={true} onClick={handleToggle} />
         <Styled.DropDownBar toggle={toggle}>
           <Styled.UserName>@{username}</Styled.UserName>
           <Styled.LogoutButton onClick={handleLogout}>

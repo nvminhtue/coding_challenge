@@ -34,8 +34,8 @@ export function* logoutSaga(action) {
   yield put(saveLoginInfo({
     userId: '',
     username: '',
-  }))
-  history.push('/')
+  }));
+  history.push('/');
 }
 
 export function* refreshTokenSaga() {
