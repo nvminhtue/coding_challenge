@@ -6,7 +6,7 @@
   "transform": {
     "^.+\\.(t|j)s$": "ts-jest"
   },
-  "collectCoverageFrom" : [
+  "collectCoverageFrom": [
     "src/**/*.ts",
     "!src/database/*/*.ts"
   ],
@@ -15,5 +15,9 @@
   "moduleDirectories": [
     "<rootDir>",
     "node_modules"
+  ],
+  "setupFiles": [
+    "dotenv/config",
+    "reflect-metadata"
   ]
 }
