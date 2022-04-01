@@ -39,6 +39,10 @@ export const ErrorTypesConstant = {
     code: 2009,
     message: 'Email or password is incorrect',
   },
+  exceedAllowedKeywords: {
+    code: 2010,
+    message: 'Number of searching keywords should be less than 100',
+  },
 };
 
 export const TableNameMappingConstant = {
@@ -68,11 +72,13 @@ export const ErrorConstant = {
   Property: {
     Id: 'id',
     Password: 'password',
-    EmailOrPassword: 'emailOrPassword'
+    EmailOrPassword: 'emailOrPassword',
+    UploadCSVFile: 'uploadCsvFile'
   },
   Type: {
     IsNotUUID: 'isNotUUID',
     IsWrongPassword: 'isWrongPassword',
+    ExceedAllowedKeywords: 'exceedAllowedKeywords'
   }
 };
 

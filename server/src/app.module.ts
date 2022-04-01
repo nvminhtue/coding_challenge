@@ -7,6 +7,7 @@ import { AppConstant } from './constants/app.constant';
 import { LoggerOption } from './logger/logger.option';
 import { QueryLogger } from './logger/query.logger';
 import { AuthModule } from './modules/auth/auth.module';
+import { UserSearchModule } from './modules/user-searches/user-search.module';
 
 const ModuleList = {
   API: [
@@ -18,6 +19,7 @@ const ModuleList = {
       inject: [WINSTON_MODULE_NEST_PROVIDER],
     }),
     AuthModule,
+    UserSearchModule,
   ]
 }
 

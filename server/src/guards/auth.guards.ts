@@ -23,7 +23,7 @@ export class AuthGuard implements CanActivate {
 
     jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, decoded) => {
       if (err) throw new BadRequestException();
-      request.email = decoded.email;
+      request.userId = decoded.userId;
     })
     return true;
   }

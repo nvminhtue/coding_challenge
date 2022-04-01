@@ -12,4 +12,5 @@ export const PathConstant = {
   LoginPath: '/login',
   LogoutPath: '/logout',
   RootPath: '/',
+  UploadCsv: '/uploadCsv'
 }

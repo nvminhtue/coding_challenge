@@ -1,7 +1,8 @@
-import { Column, Entity, Unique } from 'typeorm';
+import { Column, Entity, OneToMany, Unique } from 'typeorm';
 
 import { BaseEntity } from '../../common/base.entity';
 import { EntityConstant } from '../../constants/entity.constant';
+import { UserSearchEntity } from '../user-searches/user-search.entity';
 
 @Entity('users')
 @Unique(['username'])
@@ -45,4 +46,7 @@ export class UserEntity extends BaseEntity {
     nullable: true,
   })
   refreshToken: string;
+
+  @OneToMany(() => UserSearchEntity, userSearch => userSearch.user)
+  userSearches: UserSearchEntity[];
 }
