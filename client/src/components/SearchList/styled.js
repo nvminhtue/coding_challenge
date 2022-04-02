@@ -93,15 +93,25 @@ export const PreviewWrapper = styled('div')`
   flex-wrap: wrap;
 `;
 
-export const PreviewContent = styled('div')`
-  width: 70vw;
-  height: 70vh;
+export const IframePreviewContent = styled('iframe')`
+  width: 80vw;
+  height: 80vh;
+  margin: 0px;
+  padding: 0px;
+  border: 1px solid rgb(204 204 204);
+  border-radius: 4px;
 `;
 
 export const Preview = styled('div')`
   display: flex;
   align-items: center;
   font-weight: bold;
+`;
+
+export const DisplayNoResult = styled('div')`
+  display: flex;
+  justify-content: center;
+  color: gray;
 `;
 
 export const ModalStyle = {
@@ -111,6 +121,8 @@ export const ModalStyle = {
     right: 'auto',
     bottom: 'auto',
     marginRight: '-50%',
+    border: 'none',
+    padding: '0',
     transform: 'translate(-50%, -50%)',
   },
 };

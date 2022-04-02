@@ -57,6 +57,11 @@ export class UserSearchService {
         'SearchResultEntity'
       )
       .where({ userId })
+      .orderBy({
+        'UserSearchEntity.runAt': 'ASC',
+        'UserSearchEntity.searchValue': 'ASC',
+        'UserSearchEntity.id': 'ASC',
+      })
 
     return await this.pagyService.queryBuilderPaginate(requestPagyDTO, query)
   }

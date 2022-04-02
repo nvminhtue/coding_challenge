@@ -27,7 +27,11 @@ export const UploadButton = styled('button')`
   }
 `;
 
-export const UploadText = styled('span')`
+export const ConfirmButton = styled(UploadButton)`
+  background-color: #f14320;
+`;
+
+export const IconText = styled('span')`
   margin: 0 0 0 4px;
 `;
 
@@ -35,4 +39,14 @@ export const UploadedFile = styled('p')`
   margin: 0 8px 0 0;
   color: gray;
   font-style: italic;
+`;
+
+export const ConfirmationWrapper = styled('div')`
+  display: flex;
+  align-items: center;
+  margin-right: 10px;
+`;
+
+export const HiddenForm = styled('div')`
+  display: none;
 `;

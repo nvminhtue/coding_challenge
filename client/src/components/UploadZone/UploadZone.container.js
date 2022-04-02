@@ -9,7 +9,6 @@ import { userInfoSelector } from '../Auth/Auth.selector';
 const UploadZone = (props) => {
   const [uploadFile, setUploadFile] = useState();
   const { uploadCsv } = props; 
-  // const [uploadResponse, setUploadResponse] = useState();
   
   const submitForm = useCallback((event) => {
     event.preventDefault();
@@ -18,31 +17,14 @@ const UploadZone = (props) => {
     dataArray.append("uploadFile", uploadFile);
 
     uploadCsv(dataArray)
-
-    // axios
-    //   .post("/", dataArray, {
-    //     headers: {
-    //       "Content-Type": "multipart/form-data"
-    //     }
-    //   })
-    //   .then((response) => {
-    //     setUploadResponse(`File uploaded successfully
-
-    //     POST - superHeroName
-    //     value - ${superHero}
-
-    //     FILE - uploadFile`);
-    //   })
-    //   .catch((error) => {
-    //     setUploadResponse(`File uploaded successfully`)
-    //   });
   }, [uploadCsv, uploadFile]);
 
   return (
     <UploadZoneComponent
       {...{
         submitForm,
-        setUploadFile
+        setUploadFile,
+        uploadFile,
       }}
       {...props}
     />
