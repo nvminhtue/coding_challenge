@@ -36,4 +36,7 @@ export class UserSearchEntity extends BaseEntity {
 
   @Column({ name: 'attempts_made', default: 0, type: 'int' })
   attemptsMade: number;
+
+  @Column({ type: 'timestamp', name: 'run_at', default: () => 'now()' })
+  runAt: Date;
 }

@@ -83,8 +83,8 @@ describe('SearchTaskService', () => {
       expect(count).to.equal(0);
     });
 
-    it('There are tasks but it is not time for execution yet (created > now)', async () => {
-      await createUserSearch({ created: new Date(Date.now() + 1000) });
+    it('There are tasks but it is not time for execution yet (runAt > now)', async () => {
+      await createUserSearch({ runAt: new Date(Date.now() + 1000) });
 
       await searchTaskService.fetchTask();
       const count = await queue.count();
@@ -92,8 +92,8 @@ describe('SearchTaskService', () => {
       expect(count).to.equal(0);
     });
 
-    it('There are tasks but it has expired (created < now - 300000)', async () => {
-      await createUserSearch({ created: new Date(Date.now() - 301000) });
+    it('There are tasks but it has expired (runAt < now - 300000)', async () => {
+      await createUserSearch({ runAt: new Date(Date.now() - 301000) });
 
       await searchTaskService.fetchTask();
       const count = await queue.count();
@@ -101,7 +101,7 @@ describe('SearchTaskService', () => {
       expect(count).to.equal(0);
     });
 
-    it('There are tasks to execute (now - 300000 <= created <= now)', async () => {
+    it('There are tasks to execute (now - 300000 <= runAt <= now)', async () => {
       const validTask = await createUserSearch();
       await searchTaskService.fetchTask();
 
@@ -147,7 +147,7 @@ describe('SearchTaskService', () => {
       task = await createUserSearch({ searchValue: 'value' });
       expiredTask = await createUserSearch({
         searchValue: 'expired value',
-        created: new Date(Date.now() - 300000)
+        runAt: new Date(Date.now() - 300000)
       });
     });
 

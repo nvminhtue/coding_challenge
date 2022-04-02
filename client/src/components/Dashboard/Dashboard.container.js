@@ -11,7 +11,7 @@ import { getToken } from '../../services/api/utils/helpers'
 const Dashboard = (props) => {
   useEffect(() => {
     const token = getToken();
-    if (!token) {
+    if (!token || props.userId) {
       const retryToken  = props.refreshToken();
       if (!retryToken) props.history.push('/');
     } else {

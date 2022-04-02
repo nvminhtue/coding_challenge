@@ -1,6 +1,10 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
-import { Connection, EntityManager } from 'typeorm';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Connection, EntityManager, Repository } from 'typeorm';
 
+import { RequestPagyDTO } from 'src/common/pagy/dto/request-pagy.dto';
+import { PagyService } from 'src/common/pagy/pagy.service';
+import { Pagy } from 'src/common/pagy/type/pagy';
 import { ErrorConstant } from 'src/constants/errors.constant';
 import { ErrorUtil } from 'src/utils/error.util';
 
@@ -10,6 +14,9 @@ import { UserSearchEntity } from './user-search.entity';
 @Injectable()
 export class UserSearchService {
   constructor(
+    @InjectRepository(UserSearchEntity)
+    private userSearchRepo: Repository<UserSearchEntity>,
+    private readonly pagyService: PagyService<UserSearchEntity>,
     private readonly connection: Connection,
     private readonly userService: UserService,
   ) { }
@@ -40,5 +47,17 @@ export class UserSearchService {
 
       await manager.save(userSearches);
     });
+  }
+
+  async getList(userId: string, requestPagyDTO: RequestPagyDTO): Promise<Pagy<UserSearchEntity>> {
+    const query = this.userSearchRepo
+      .createQueryBuilder()
+      .leftJoinAndSelect(
+        'UserSearchEntity.searchResult',
+        'SearchResultEntity'
+      )
+      .where({ userId })
+
+    return await this.pagyService.queryBuilderPaginate(requestPagyDTO, query)
   }
 }

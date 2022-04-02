@@ -4,6 +4,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { WinstonModule, WINSTON_MODULE_NEST_PROVIDER } from 'nest-winston';
 import { getConnectionOptions } from 'typeorm';
 
+import { PagyModule } from './common/pagy/pagy.module';
 import { AppConstant } from './constants/app.constant';
 import { LoggerOption } from './logger/logger.option';
 import { QueryLogger } from './logger/query.logger';
@@ -24,6 +25,7 @@ const ModuleList = {
     AuthModule,
     UserSearchModule,
     SearchTaskModule,
+    PagyModule,
   ]
 }
 
