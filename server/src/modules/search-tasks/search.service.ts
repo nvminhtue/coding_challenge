@@ -94,7 +94,7 @@ export class SearchService {
       throw Error();
     }
     const searchFound = preview.substring(
-      preview.lastIndexOf(`id="result-stats">`) + `id="result-stats">`.length,
+      preview.lastIndexOf(`id="result-stats">About`) + `id="result-stats">`.length,
       preview.indexOf('</nobr></div>')
     ).replace(/<nobr>|&nbsp;/g, '');
     const adWordsTotal = preview.match(/title="Why\sthis\sad\?"/g)?.length || 0;

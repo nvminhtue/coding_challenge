@@ -2,14 +2,14 @@ import { Inject, Injectable, Logger } from '@nestjs/common';
 import { Interval } from '@nestjs/schedule';
 import { InjectConnection, InjectRepository } from '@nestjs/typeorm';
 import Bull from 'bull';
-// import { exec } from 'child_process';
+import { exec } from 'child_process';
 import chunk from 'lodash/chunk';
 import isEmpty from 'lodash/isEmpty';
 import { WINSTON_MODULE_NEST_PROVIDER } from 'nest-winston';
 import { Connection, EntityManager, Repository } from 'typeorm';
 
 import { LoggerConstant } from 'src/logger/logger.constant';
-// import { execute } from 'src/utils/child-process.util';
+import { execute } from 'src/utils/child-process.util';
 
 import { SearchStatusEnum, TaskConstant } from '../user-searches/user-search.constant';
 import { UserSearchEntity } from '../user-searches/user-search.entity';
@@ -41,16 +41,17 @@ export class SearchTaskService {
           .createQueryBuilder(UserSearchEntity, 'UserSearchEntity')
           .where({ status: SearchStatusEnum.Pending })
           .andWhere(
-            `UserSearchEntity.created
+            `UserSearchEntity.runAt
             BETWEEN current_timestamp - interval '${TaskConstant.ValidIntervalDuration} milliseconds'
             AND current_timestamp`,
           )
           .setLock('pessimistic_write')
           .take(100)
-          .orderBy('UserSearchEntity.created', 'ASC')
+          .orderBy('UserSearchEntity.runAt', 'ASC')
           .getMany();
 
         if (isEmpty(activeTasks)) {
+          await execute(exec, `find $PWD/google-search-module ! -name 'google-search.sh' -type f -exec rm -f {} +`)
           return true;
         }
 
@@ -81,9 +82,7 @@ export class SearchTaskService {
       }
       if (completedTasks.length) {
         await this.searchService.afterExecute(completedTasks);
-        // for (const { id: taskId } of completedTasks) {
-        //   await execute(exec, `rm $PWD/google-search-module/${taskId}.html`)
-        // }
+
         await job.update(errorTasks);
       }
 
@@ -98,10 +97,6 @@ export class SearchTaskService {
       await this.searchService.afterExecute(job.data);
     } catch (error) {
       this.loging(error);
-    // } finally {
-    //   for (const { id: taskId } of job.data) {
-    //     await execute(exec, `rm $PWD/google-search-module/${taskId}.html`)
-    //   }
     }
   }
 

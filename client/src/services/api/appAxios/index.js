@@ -39,7 +39,9 @@ appAxios.interceptors.response.use(
       return Promise.reject();
     }
 
-    const { statusCode } = error.response.data?.errors ?? {};
+    const statusCode = error.response.data?.errors.code
+      ?? error.response.data?.errors.statusCode
+      ?? {};
 
     switch (statusCode.toString() || error.response.status?.toString()) {
       case ERROR_CODES.INTERNAL_SERVER_ERROR:

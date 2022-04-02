@@ -86,7 +86,7 @@ describe('Query specific item of user entity', () => {
       const [status, res] = await getResponse(
         app,
         'post',
-        `/uploadCsv`,
+        `/search-list/uploadCsv`,
       )
 
       expect(status).to.equal(401);
