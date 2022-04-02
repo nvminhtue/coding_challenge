@@ -8,6 +8,7 @@ import PropTypes from 'prop-types';
 import * as Styled from './styled';
 import { SearchStatus } from '../Dashboard/Dashboard.constant';
 import { timeConverter } from '../../utils/helpers/timeConverter'
+import isUndefinedOrNull from '../../utils/helpers/isUndefinedOrNull'
 
 Modal.setAppElement('#root')
 
@@ -36,7 +37,7 @@ const SearchList = ({
           </Styled.HeaderRow>
         </Styled.THeader>
         <Styled.TBody>
-          {searchItems.length && searchItems.map(({
+          {searchItems && searchItems.map(({
             searchValue,
             runAt,
             status,
@@ -46,10 +47,10 @@ const SearchList = ({
               <Styled.SearchValue>{searchValue}</Styled.SearchValue>
               <Styled.BodyDetail>{runAt ? timeConverter(runAt) : ''}</Styled.BodyDetail>
               <Styled.BodyDetail>{searchResult?.searchFound || ''}</Styled.BodyDetail>
-              <Styled.BodyDetail>{searchResult?.adWordsTotal || ''}</Styled.BodyDetail>
-              <Styled.BodyDetail>{searchResult?.linkTotal || ''}</Styled.BodyDetail>
+              <Styled.BodyDetail>{!isUndefinedOrNull(searchResult?.adWordsTotal) ? searchResult?.adWordsTotal : ''}</Styled.BodyDetail>
+              <Styled.BodyDetail>{!isUndefinedOrNull(searchResult?.linkTotal) ? searchResult?.linkTotal : ''}</Styled.BodyDetail>
               <Styled.BodyDetail>
-                {status && (
+                {!isUndefinedOrNull(status) && (
                   <Styled.StatusResult status={status}>
                     <FontAwesomeIcon icon={faCircleDot} fontSize={8} />
                     <Styled.StatusText>
@@ -88,9 +89,7 @@ const SearchList = ({
         style={Styled.ModalStyle}
         contentLabel="Example Modal"
       >
-        <Styled.PreviewWrapper>
-          <Styled.PreviewContent dangerouslySetInnerHTML={{ __html: `${content}` }} />
-        </Styled.PreviewWrapper>
+        <Styled.IframePreviewContent srcDoc={content} title='preview'></Styled.IframePreviewContent>
       </Modal>
     </Styled.SearchContainer>
   )
