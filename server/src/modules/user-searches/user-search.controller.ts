@@ -43,7 +43,7 @@ export class UserSearchController {
   async fetchList(
     @Res()res: Response,
     @Req() req: Request,
-    @Query('pagyInfo') requestPagyDTO: RequestPagyDTO,
+    @Query() requestPagyDTO: RequestPagyDTO,
   ) {
     const userId = get(req, 'userId');
 

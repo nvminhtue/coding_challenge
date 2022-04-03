@@ -84,7 +84,13 @@ export class SearchService {
   }
 
   crawlGoogleSearch(taskId: string, searchQuery: string) {
-    return execute(exec, `$PWD/google-search-module/google-search.sh ${taskId} ${searchQuery}`);
+    const randomIp = `${this.randomInt(255)}.${this.randomInt(255)}.${this.randomInt(255)}.${this.randomInt(255)}`;
+    return execute(exec, `$PWD/google-search-module/google-search.sh ${taskId} ${searchQuery} ${randomIp}`);
+  }
+
+  randomInt(range) {
+    if (typeof range !== 'number') return '0';
+    return `${Math.floor(Math.random() * range)}`
   }
 
   async analyzingCrawledData(taskId): Promise<AnalyzedCrawledData> {

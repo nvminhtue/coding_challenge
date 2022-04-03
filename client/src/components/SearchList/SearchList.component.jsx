@@ -1,9 +1,9 @@
 import React from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCircleDot, faTelevision } from '@fortawesome/free-solid-svg-icons'
-import { Pagination } from 'react-pagination-bar'
 import Modal from 'react-modal';
 import PropTypes from 'prop-types';
+import Pagination from '@material-ui/lab/Pagination';
 
 import * as Styled from './styled';
 import { SearchStatus } from '../Dashboard/Dashboard.constant';
@@ -75,12 +75,14 @@ const SearchList = ({
       </Styled.Table>
       <Styled.PaginationContainer>
         <Pagination
-          initialPage={currentPage}
-          itemsPerPage={pagePostsLimit}
-          withProgressBar={true}
-          onPageСhange={(pageNumber) => setCurrentPage(pageNumber)}
-          totalItems={pagyInfo.total}
-          pageCount={pagyInfo.pageCount}
+          className="my-3"
+          count={pagyInfo.pageCount}
+          page={currentPage}
+          siblingCount={1}
+          boundaryCount={1}
+          variant="outlined"
+          shape="rounded"
+          onChange={(e,pageNumber) => setCurrentPage(pageNumber)}
         />
       </Styled.PaginationContainer>
       <Modal

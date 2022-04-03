@@ -19,7 +19,7 @@ export function* uploadCsvSaga(action) {
 
 export function* fetchSearchSaga(action) {
   const { payload } = action;
-  const result = yield call([DashboardAPI, DashboardAPI.fetchSearch], { pagyInfo: payload });
+  const result = yield call([DashboardAPI, DashboardAPI.fetchSearch], payload);
   if (result) {
     yield put(saveSearchInfo({
       searchItems: result.items,

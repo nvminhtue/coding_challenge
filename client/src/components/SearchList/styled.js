@@ -80,6 +80,7 @@ export const PaginationContainer = styled('div')`
   width: 100%;
   justify-content: center;
   margin-top: auto;
+  margin-bottom: 10px;
 `;
 
 export const SearchContainer = styled('div')`

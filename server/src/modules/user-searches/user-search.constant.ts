@@ -6,10 +6,14 @@ export enum SearchStatusEnum {
 
 export const TaskConstant = {
   MaximumAttempts: 3,
-  FirstAttempts: 3,
+  FirstAttempts: 1,
   ValidIntervalDuration: 300000,
+  MaximumPerFetch: 100,
+  ConcurrencyHandlers: 10,
   JobChunk: 10,
+  IntervalBatchRun: 10000,
   QueueOptions: {
+    prefix: 'Dev',
     defaultJobOptions: {
       attempts:  3,
       removeOnComplete:  100,
