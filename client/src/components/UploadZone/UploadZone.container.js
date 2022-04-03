@@ -1,4 +1,4 @@
-import { useCallback, useState } from 'react';
+import { useCallback, useRef, useState } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 
@@ -8,8 +8,20 @@ import { userInfoSelector } from '../Auth/Auth.selector';
 
 const UploadZone = (props) => {
   const [uploadFile, setUploadFile] = useState();
+  const inputFileRef = useRef();
+  const inputSubmitRef = useRef();
+
   const { uploadCsv } = props; 
-  
+
+  const handleUpload = () => {
+    inputFileRef.current.click();
+  }
+
+  const handleSubmit = () => {
+    inputSubmitRef.current.click();
+    setUploadFile();
+  }
+
   const submitForm = useCallback((event) => {
     event.preventDefault();
 
@@ -25,6 +37,10 @@ const UploadZone = (props) => {
         submitForm,
         setUploadFile,
         uploadFile,
+        inputFileRef,
+        inputSubmitRef,
+        handleUpload,
+        handleSubmit,
       }}
       {...props}
     />
