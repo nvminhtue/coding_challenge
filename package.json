@@ -1,0 +1,14 @@
+{
+  "name": "technical_test",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "git@github.com:nvminhtue/coding_challenge.git",
+  "author": "nvminhtue <nvminhtue@gmail.com>",
+  "license": "MIT",
+  "scripts": {
+    "frontend-build": "npm build --prefix ./client",
+    "backend-build": "npm build --prefix ./server",
+    "postinstall": "npm run frontend-build && npm run backend-build",
+    "start:prod": "npm run start:prod --prefix ./server"
+  }
+}
