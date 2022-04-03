@@ -4,6 +4,21 @@ export enum SearchStatusEnum {
   Fail,
 }
 
+const RedisConfig = {
+  'dev': {
+    host: process.env.REDIS_HOST,
+    port: parseInt(process.env.REDIS_PORT, 10),
+  },
+  'production': {
+    host: process.env.REDIS_HOST,
+    port: parseInt(process.env.REDIS_PORT, 10),
+    password: process.env.REDIS_PASSWORD,
+    tls: {
+      rejectUnauthorized: false,
+    },
+  },
+}
+
 export const TaskConstant = {
   MaximumAttempts: 3,
   FirstAttempts: 1,
@@ -13,16 +28,12 @@ export const TaskConstant = {
   JobChunk: 10,
   IntervalBatchRun: 10000,
   QueueOptions: {
-    prefix: 'Dev',
+    prefix: process.env.NODE_ENV,
     defaultJobOptions: {
-      attempts:  3,
-      removeOnComplete:  100,
-      removeOnFail:  100,
+      attempts: 3,
+      removeOnComplete: 100,
+      removeOnFail: 100,
     },
-    redis: {
-      host: process.env.REDIS_HOST,
-      port: parseInt(process.env.REDIS_PORT, 10),
-      password: process.env.REDIS_PASSWORD,
-    },
+    redis: RedisConfig[process.env.NODE_ENV],
   },
 }

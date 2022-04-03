@@ -9,7 +9,7 @@ import isUndefinedOrNull from '../../../utils/helpers/isUndefinedOrNull';
 import { ERROR_CODES } from './constants';
 
 const axiosConfig = {
-  baseURL: `${process.env.REACT_APP_SERVER_URL}`,
+  baseURL: `${process.env.REACT_APP_SERVER_URL}/api`,
   timeout: 120000,
   withCredentials: true,
   headers: {

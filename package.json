@@ -1,0 +1,18 @@
+{
+  "name": "technical_test",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "git@github.com:nvminhtue/coding_challenge.git",
+  "author": "nvminhtue <nvminhtue@gmail.com>",
+  "license": "MIT",
+  "engines": {
+    "node": "14.17.6",
+    "yarn": "1.22.4"
+  },
+  "scripts": {
+    "frontend-build": "yarn --cwd ./client install && yarn --cwd ./client build",
+    "backend-build": "yarn --cwd ./server install && yarn --cwd ./server build",
+    "deploy": "cp -a client/build/. server/build",
+    "postinstall": "yarn run frontend-build && yarn run backend-build"
+  }
+}
