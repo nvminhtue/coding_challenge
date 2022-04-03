@@ -30,8 +30,11 @@ export const SmallHeader = styled(Header)`
 export const TBody = styled('tbody')``;
 
 export const BodyRow = styled('tr')`
-  &:hover {
+  &:nth-child(even) {
     background-color: #e4e4e4;
+  }
+
+  &:hover {
     cursor: pointer;
   }
 `;

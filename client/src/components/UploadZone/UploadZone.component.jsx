@@ -1,22 +1,19 @@
-import React, { useRef } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faUpload, faCheckDouble } from '@fortawesome/free-solid-svg-icons'
 
 import * as Styled from './styled';
 
-const UploadZone = ({ submitForm, setUploadFile, uploadFile }) => {
-  const inputFileRef = useRef();
-  const inputSubmitRef = useRef();
-
-  const handleUpload = () => {
-    inputFileRef.current.click();
-  }
-
-  const handleSubmit = () => {
-    inputSubmitRef.current.click();
-  }
-
+const UploadZone = ({
+  submitForm,
+  setUploadFile,
+  uploadFile,
+  inputFileRef,
+  inputSubmitRef,
+  handleSubmit,
+  handleUpload,
+}) => {
   return (
     <Styled.UploadZoneContainer>
       <Styled.HiddenForm>

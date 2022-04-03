@@ -32,8 +32,8 @@ const SearchList = ({
             <Styled.Header>Results</Styled.Header>
             <Styled.SmallHeader>AdWords total</Styled.SmallHeader>
             <Styled.SmallHeader>Link total</Styled.SmallHeader>
-            <Styled.Header>Status</Styled.Header>
-            <Styled.Header>Preview</Styled.Header>
+            <Styled.SmallHeader>Status</Styled.SmallHeader>
+            <Styled.SmallHeader>Preview</Styled.SmallHeader>
           </Styled.HeaderRow>
         </Styled.THeader>
         <Styled.TBody>
@@ -81,8 +81,8 @@ const SearchList = ({
           siblingCount={1}
           boundaryCount={1}
           variant="outlined"
-          shape="rounded"
-          onChange={(e,pageNumber) => setCurrentPage(pageNumber)}
+          color="primary"
+          onChange={(e, pageNumber) => setCurrentPage(pageNumber)}
         />
       </Styled.PaginationContainer>
       <Modal

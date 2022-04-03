@@ -13,6 +13,6 @@ export const SearchStatus = {
 }
 
 export const PagyConstant = {
-  PageItems: 10,
+  PageItems: 15,
   FirstPage: 1,
 }
