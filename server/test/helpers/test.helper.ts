@@ -23,6 +23,7 @@ import { RequestLogger } from 'src/logger/request.logger';
 import { ResponseLogger } from 'src/logger/response.logger';
 import { SearchResultEntity } from 'src/modules/search-results/search-result.entity';
 import { SearchTaskService } from 'src/modules/search-tasks/search-task.service';
+import { TaskConstant } from 'src/modules/user-searches/user-search.constant';
 import { UserSearchEntity } from 'src/modules/user-searches/user-search.entity';
 import { UserEntity } from 'src/modules/users/user.entity';
 
@@ -36,6 +37,7 @@ const clearDatabase = async () => {
 
 export const initApp = async () => {
   jest.setTimeout(60000);
+  TaskConstant.QueueOptions.prefix = 'Test';
 
   const moduleFixture: TestingModule = await Test.createTestingModule({
     imports: [AppModule],

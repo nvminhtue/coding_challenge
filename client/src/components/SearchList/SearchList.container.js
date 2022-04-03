@@ -36,7 +36,7 @@ const SearchList = (props) => {
         handleToggleModal,
         setIsOpen,
         modalIsOpen,
-        content
+        content,
       }}
       {...props}
     />

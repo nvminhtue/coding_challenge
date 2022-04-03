@@ -83,6 +83,48 @@ describe('SearchTaskService', () => {
       expect(count).to.equal(0);
     });
 
+    it(
+      'Only one job will be created when there are multiple job fetching at the same time',
+      async () => {
+        await createUserSearch();
+        await Promise.all([
+          searchTaskService.fetchTask(),
+          searchTaskService.fetchTask(),
+          searchTaskService.fetchTask(),
+          searchTaskService.fetchTask(),
+          searchTaskService.fetchTask(),
+          searchTaskService.fetchTask(),
+          searchTaskService.fetchTask(),
+          searchTaskService.fetchTask(),
+          searchTaskService.fetchTask(),
+          searchTaskService.fetchTask(),
+          searchTaskService.fetchTask(),
+          searchTaskService.fetchTask(),
+          searchTaskService.fetchTask(),
+          searchTaskService.fetchTask(),
+          searchTaskService.fetchTask(),
+          searchTaskService.fetchTask(),
+          searchTaskService.fetchTask(),
+          searchTaskService.fetchTask(),
+          searchTaskService.fetchTask(),
+          searchTaskService.fetchTask(),
+          searchTaskService.fetchTask(),
+          searchTaskService.fetchTask(),
+          searchTaskService.fetchTask(),
+          searchTaskService.fetchTask(),
+          searchTaskService.fetchTask(),
+          searchTaskService.fetchTask(),
+          searchTaskService.fetchTask(),
+          searchTaskService.fetchTask(),
+          searchTaskService.fetchTask(),
+          searchTaskService.fetchTask(),
+        ]);
+
+        const count = await queue.count()
+        expect(count).to.equal(1);
+      },
+    );
+
     it('There are tasks but it is not time for execution yet (runAt > now)', async () => {
       await createUserSearch({ runAt: new Date(Date.now() + 1000) });
 
@@ -108,7 +150,7 @@ describe('SearchTaskService', () => {
       const activeTask = await getRepository(UserSearchEntity).findOne(validTask.id);
 
       expect(activeTask.status).to.equal(0);
-      expect(activeTask.attemptsMade).to.equal(3);
+      expect(activeTask.attemptsMade).to.equal(1);
       expect(await queue.count()).to.equal(1);
     });
 
@@ -125,7 +167,7 @@ describe('SearchTaskService', () => {
         searchTaskService.fetchTask(),
       ]);
 
-      expect(await queue.count()).to.equal(2);
+      expect(await queue.count()).to.equal(1);
 
       queue.add = addJob;
     });

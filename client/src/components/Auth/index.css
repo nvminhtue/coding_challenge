@@ -11,11 +11,3 @@ body {
 table {
 	border-spacing: 0;
 }
-
-.rpb-item--active {
-	background-color: #FF8200 !important;
-}
-
-.rpb-progress {
-	background-color: #FF8200 !important;
-}

@@ -34,12 +34,7 @@ describe('fetch search saga', () => {
     const expected = call([DashboardAPI, DashboardAPI.fetchSearch], values);
 
     expect(result.payload.fn).toEqual(expected.payload.fn);
-    expect(result.payload.args[0]).toMatchObject({
-      pagyInfo: {
-        page: 1,
-        count: 10,
-      }
-    });
+    expect(result.payload.args[0]).toMatchObject(values);
   });
 
   it('should save search info to store after called api successfully', async () => {

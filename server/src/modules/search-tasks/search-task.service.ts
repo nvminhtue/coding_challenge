@@ -27,12 +27,12 @@ export class SearchTaskService {
     @Inject(WINSTON_MODULE_NEST_PROVIDER) private readonly logger: Logger,
   ) {
     this.buildQueue();
-    this.queue.process(10, (job, done) => this.processor(job, done));
+    this.queue.process(TaskConstant.ConcurrencyHandlers, (job, done) => this.processor(job, done));
     this.queue.on('completed', (job, result) => this.completedHandler(job, result));
     this.queue.on('failed', (job, error) => this.failedHandler(job, error));
   }
 
-  @Interval(10000)
+  @Interval(TaskConstant.IntervalBatchRun)
   async fetchTask() {
     try {
       let activeTasks = [];
@@ -40,18 +40,20 @@ export class SearchTaskService {
         activeTasks = await manager
           .createQueryBuilder(UserSearchEntity, 'UserSearchEntity')
           .where({ status: SearchStatusEnum.Pending })
+          .andWhere('UserSearchEntity.attemptsMade < :mininumAttemp', {
+            mininumAttemp: TaskConstant.FirstAttempts,
+          })
           .andWhere(
             `UserSearchEntity.runAt
             BETWEEN current_timestamp - interval '${TaskConstant.ValidIntervalDuration} milliseconds'
             AND current_timestamp`,
           )
           .setLock('pessimistic_write')
-          .take(100)
+          .take(TaskConstant.MaximumPerFetch)
           .orderBy('UserSearchEntity.runAt', 'ASC')
           .getMany();
 
         if (isEmpty(activeTasks)) {
-          await execute(exec, `find $PWD/google-search-module ! -name 'google-search.sh' -type f -exec rm -f {} +`)
           return true;
         }
 
@@ -97,6 +99,10 @@ export class SearchTaskService {
       await this.searchService.afterExecute(job.data);
     } catch (error) {
       this.loging(error);
+    } finally {
+      job.data.map(async task => {
+        await execute(exec, `rm -f $PWD/google-search-module/${task.id}.html`)
+      })
     }
   }
 
