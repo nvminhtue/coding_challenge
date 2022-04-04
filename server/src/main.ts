@@ -43,10 +43,11 @@ async function bootstrap() {
   );
   app.useGlobalGuards(new RequestLogger(app.get(WINSTON_MODULE_NEST_PROVIDER)));
   app.useGlobalInterceptors(new ResponseLogger(app.get(WINSTON_MODULE_NEST_PROVIDER)));
+  app.setGlobalPrefix('api');
   app.use(CurrentContext.middleware);
   app.use(cookieParser());
 
   ProcessLogger(app.get(WINSTON_MODULE_NEST_PROVIDER));
-  await app.listen(process.env.PORT, process.env.APP_DOMAIN);
+  await app.listen(process.env.PORT || 4000);
 }
 bootstrap();

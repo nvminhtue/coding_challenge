@@ -71,17 +71,18 @@ const DBConfig = {
   },
   production: {
     type: 'postgres',
-    host: process.env.DATABASE_HOST,
-    port: process.env.DATABASE_PORT,
-    username: process.env.DATABASE_USERNAME,
-    password: process.env.DATABASE_PASSWORD,
-    database: process.env.DATABASE_PRODUCTION_NAME,
+    host: process.env.POSTGRES_HOST,
+    port: process.env.POSTGRES_PORT,
+    username: process.env.POSTGRES_USERNAME,
+    password: process.env.POSTGRES_PASSWORD,
+    database: process.env.POSTGRES_DATABASE,
     synchronize: false,
     logging: true,
     entities: ['dist/**/*.entity.js'],
     migrations: ['dist/database/migrations/*.js'],
     cli: { migrationsDir: 'src/database/migrations' },
     migrationsTableName: 'migrations',
+    ssl: { rejectUnauthorized: false }
   },
 }
 
