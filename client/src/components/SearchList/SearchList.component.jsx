@@ -14,7 +14,6 @@ Modal.setAppElement('#root')
 
 const SearchList = ({
   currentPage,
-  pagePostsLimit,
   setCurrentPage,
   searchItems,
   pagyInfo,

@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { compose } from 'redux';
 import { connect } from 'react-redux';
 import jwtDecode from 'jwt-decode';
@@ -9,6 +9,7 @@ import { userInfoSelector } from '../Auth/Auth.selector';
 import { getToken } from '../../services/api/utils/helpers'
 
 const Dashboard = (props) => {
+  const [triggerRequestPage, setTriggerRequest] = useState(false);
   useEffect(() => {
     const token = getToken();
     if (!token || props.userId) {
@@ -23,6 +24,7 @@ const Dashboard = (props) => {
 
   return props.userId && (
     <DashboardComponent
+      {...{ triggerRequestPage, setTriggerRequest }}
       {...props}
     />
   );

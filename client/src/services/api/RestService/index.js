@@ -1,6 +1,7 @@
 import get from 'lodash/get';
 import qs from 'qs';
 import { toast } from 'react-toastify';
+import { trackPromise } from 'react-promise-tracker';
 
 import appAxios from '../appAxios';
 import responseErrorFormatter from '../utils/responseErrorFormatter';
@@ -54,7 +55,7 @@ class RestService {
 
   async execute(request) {
     try {
-      const response = await this.axios(request);
+      const response = await trackPromise(this.axios(request));
       return this.successHandler(response);
     } catch (error) {
       return this.failureHandler(error);
