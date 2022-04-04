@@ -7,12 +7,12 @@ import * as Styled from './styled';
 
 const UploadZone = ({
   submitForm,
-  setUploadFile,
   uploadFile,
   inputFileRef,
   inputSubmitRef,
   handleSubmit,
   handleUpload,
+  handleChangeFile,
 }) => {
   return (
     <Styled.UploadZoneContainer>
@@ -27,7 +27,7 @@ const UploadZone = ({
             type="file"
             accept=".csv"
             ref={inputFileRef}
-            onChange={(e) => setUploadFile(e.target.files[0])} />
+            onChange={handleChangeFile} />
           <br />
           <input type="submit" ref={inputSubmitRef}/>
         </form>
@@ -55,8 +55,12 @@ const UploadZone = ({
 
 UploadZone.propTypes = {
   submitForm: PropTypes.func,
-  setUploadFile: PropTypes.func,
   uploadFile: PropTypes.object,
+  inputFileRef: PropTypes.node,
+  inputSubmitRef: PropTypes.node,
+  handleSubmit: PropTypes.func,
+  handleUpload: PropTypes.func,
+  handleChangeFile: PropTypes.func,
 }
 
 export default React.memo(UploadZone);

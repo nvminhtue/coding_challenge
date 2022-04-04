@@ -11,15 +11,21 @@ const UploadZone = (props) => {
   const inputFileRef = useRef();
   const inputSubmitRef = useRef();
 
-  const { uploadCsv } = props; 
+  const { uploadCsv, setTriggerRequest } = props; 
 
   const handleUpload = () => {
     inputFileRef.current.click();
   }
 
+  const handleChangeFile = (e) => {
+    setUploadFile(e.target.files[0])
+    e.target.value = null;
+  }
+
   const handleSubmit = () => {
     inputSubmitRef.current.click();
     setUploadFile();
+    setTriggerRequest(true)
   }
 
   const submitForm = useCallback((event) => {
@@ -35,12 +41,12 @@ const UploadZone = (props) => {
     <UploadZoneComponent
       {...{
         submitForm,
-        setUploadFile,
         uploadFile,
         inputFileRef,
         inputSubmitRef,
         handleUpload,
         handleSubmit,
+        handleChangeFile,
       }}
       {...props}
     />

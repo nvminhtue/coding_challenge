@@ -7,7 +7,7 @@ import { searchInfoSelector } from '../Dashboard/Dashboard.selector';
 import { PagyConstant } from '../Dashboard/Dashboard.constant';
 
 const SearchList = (props) => {
-  const { pagyInfo } = props;
+  const { pagyInfo, triggerRequestPage, setTriggerRequest } = props;
   const { fetchSearch } = props;
   const [currentPage, setCurrentPage] = useState(pagyInfo.page || PagyConstant.FirstPage);
   const pagePostsLimit = PagyConstant.PageItems;
@@ -25,7 +25,8 @@ const SearchList = (props) => {
       page: currentPage,
       count: pagePostsLimit,
     })
-  }, [fetchSearch, currentPage, pagePostsLimit])
+    setTriggerRequest(false);
+  }, [fetchSearch, currentPage, pagePostsLimit, triggerRequestPage, setTriggerRequest])
 
   return (
     <SearchListComponent
