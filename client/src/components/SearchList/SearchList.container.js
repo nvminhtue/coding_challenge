@@ -21,10 +21,12 @@ const SearchList = (props) => {
   }), [modalIsOpen])
 
   useEffect(() => {
-    fetchSearch({
-      page: currentPage,
-      count: pagePostsLimit,
-    })
+    if (!triggerRequestPage) {
+      fetchSearch({
+        page: currentPage,
+        count: pagePostsLimit,
+      })
+    }
     setTriggerRequest(false);
   }, [fetchSearch, currentPage, pagePostsLimit, triggerRequestPage, setTriggerRequest])
 
