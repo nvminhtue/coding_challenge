@@ -37,3 +37,11 @@ export const TaskConstant = {
     redis: RedisConfig[process.env.NODE_ENV],
   },
 }
+
+export const UserSearchConstant = {
+  Delimiter: {
+    Comma: ',',
+    CRLF: '\n'
+  },
+  CSVExtension: 'text/csv'
+}
