@@ -54,6 +54,7 @@ describe('Query specific item of user entity', () => {
       expect(data.items.length).to.equal(1);
       expect(data.items[0].id).to.equal(userSearch.id);
       expect(data.items[0].userId).to.equal(user.id);
+      expect(new Date(data.items[0].runAt)).to.eql(new Date(userSearch.runAt));
       expect(data.items[0].searchValue).to.equal(userSearch.searchValue);
       expect(data.items[0].searchResult.id).to.equal(searchResult.id);
     })

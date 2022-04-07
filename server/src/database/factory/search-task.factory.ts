@@ -14,6 +14,6 @@ export const createUserSearch = async (
     user: userSearch.user || await createUser(),
     status: userSearch.status || SearchStatusEnum.Pending,
     searchValue: userSearch.searchResult || faker.name.firstName(),
-    runAt: userSearch.runAt || new Date(),
+    runAt: userSearch.runAt,
   });
 };

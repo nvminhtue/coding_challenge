@@ -1,28 +1,32 @@
 import { INestApplication } from '@nestjs/common';
 import { expect } from 'chai';
-// import { Response } from 'express';
-// import jwt from 'jsonwebtoken';
-// import { createRequest } from 'node-mocks-http';
+import { getRepository } from 'typeorm';
 
-// import { createUser } from 'src/database/factory/user.factory';
-// import { UserEntity } from 'src/modules/users/user.entity';
+import { createUser } from 'src/database/factory/user.factory';
+import { UserSearchEntity } from 'src/modules/user-searches/user-search.entity';
+import { UserEntity } from 'src/modules/users/user.entity';
 
 import {
   closeApp,
+  formatFullError,
   getResponse,
-  // getSession,
+  getSession,
   initApp,
 } from 'test/helpers/test.helper';
 
+import * as CSVParser from '../../../src/utils/csv-parser.util';
+// import jwt from 'jsonwebtoken';
+
+
 describe('Query specific item of user entity', () => {
   let app: INestApplication;
-  // let user: UserEntity;
-  // let session: string;
+  let user: UserEntity;
+  let session: string;
 
   beforeAll(async (done) => {
     app = await initApp();
-    // user = await createUser();
-    // session = await getSession(app, user)
+    user = await createUser();
+    session = await getSession(app, user)
     done();
   })
 
@@ -32,54 +36,30 @@ describe('Query specific item of user entity', () => {
     done();
   })
 
-  // describe.only('Success', () => {
-  //   it('should return success with uploaded file', async () => {
-  //     const accessToken = jwt.sign(
-  //       { userId: user.id, username: user.username, email: user.email },
-  //       process.env.ACCESS_TOKEN_SECRET, {
-  //       expiresIn: '1d'
-  //     });
+  describe('Success', () => {
+    it('should return success with uploaded file', async () => {
+      jest.spyOn(CSVParser, 'CSVParserToString').mockReturnValue(['a', 'b'])
 
-  //     // tslint:disable-next-line:no-empty
-  //     function MockFile() { };
+      const [status] = await getResponse(
+        app,
+        'post',
+        `/search-list/uploadCsv`,
+        session,
+      )
 
-  //     MockFile.prototype.create = (name, size, mimeType) => {
-  //       name = name || 'mock.txt';
-  //       size = size || 1024;
-  //       mimeType = mimeType || 'plain/txt';
+      const userSearches = await getRepository(UserSearchEntity).find({
+        order: {
+          searchValue: 'ASC',
+          created: 'DESC',
+        },
+      });
 
-  //       function range(count) {
-  //         let output = '';
-  //         for (let i = 0; i < count; i++) {
-  //           output += 'a';
-  //         }
-  //         return output;
-  //       }
-
-  //       const blob = new Blob([range(size)], { type: mimeType });
-
-  //       return blob;
-  //     };
-  //     const _req = createRequest({
-  //       headers: {
-  //         'authorization': `Bearer ${accessToken}`,
-  //       },
-  //       files: new MockFile(),
-  //     })
-
-  //     const [_status, _res] = await getResponse(
-  //       app,
-  //       'post',
-  //       `/uploadCsv`,
-  //     )
-
-  //     // expect(status).to.equal(200);
-  //     // expect(data.id).to.equal(user.id);
-  //     // expect(data.name).to.equal(user.name);
-  //     // expect(data.username).to.equal(user.username);
-  //     // expect(data.email).to.equal(user.email);
-  //   })
-  // })
+      expect(status).to.equal(201);
+      expect(userSearches.length).to.equal(2);
+      expect(userSearches[0].searchValue).to.equal('a');
+      expect(userSearches[1].searchValue).to.equal('b');
+    })
+  })
 
   describe('Failure', () => {
     it('should return error when user is not login', async () => {
@@ -92,5 +72,23 @@ describe('Query specific item of user entity', () => {
       expect(status).to.equal(401);
       expect(res.errors.message).to.eql('Unauthorized');
     })
+  })
+
+  it('should throw error with uploaded file with more than 100 keywords', async () => {
+    const a = [];
+    a.length = 101;
+    jest.spyOn(CSVParser, 'CSVParserToString').mockReturnValue(a)
+
+    const [status, data] = await getResponse(
+      app,
+      'post',
+      `/search-list/uploadCsv`,
+      session,
+    )
+
+    const error = formatFullError(2010, 'Number of searching keywords should be less than 100', 'uploadCsvFile', null)
+
+    expect(status).to.equal(400);
+    expect(data.errors).to.eql(error);
   })
 })
