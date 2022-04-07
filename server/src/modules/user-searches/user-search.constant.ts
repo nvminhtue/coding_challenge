@@ -37,3 +37,7 @@ export const TaskConstant = {
     redis: RedisConfig[process.env.NODE_ENV],
   },
 }
+
+export const UserSearchConstant = {
+  CSVMaximumLength: 100,
+}
