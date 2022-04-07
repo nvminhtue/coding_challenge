@@ -43,6 +43,10 @@ export const ErrorTypesConstant = {
     code: 2010,
     message: 'Number of searching keywords should be less than 100',
   },
+  wrongFileExtension: {
+    code: 2011,
+    message: 'Uploaded file extension is not supported',
+  },
 };
 
 export const TableNameMappingConstant = {
@@ -78,7 +82,8 @@ export const ErrorConstant = {
   Type: {
     IsNotUUID: 'isNotUUID',
     IsWrongPassword: 'isWrongPassword',
-    ExceedAllowedKeywords: 'exceedAllowedKeywords'
+    ExceedAllowedKeywords: 'exceedAllowedKeywords',
+    WrongFileExtension: 'wrongFileExtension'
   }
 };
 

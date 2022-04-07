@@ -9,6 +9,7 @@ import { ErrorConstant } from 'src/constants/errors.constant';
 import { ErrorUtil } from 'src/utils/error.util';
 
 import { UserService } from '../users/user.service';
+import { UserSearchConstant } from './user-search.constant';
 import { UserSearchEntity } from './user-search.entity';
 
 @Injectable()
@@ -22,9 +23,31 @@ export class UserSearchService {
   ) { }
 
   async handleCsv(files, userId: string): Promise<void> {
+    // could not regconize pre-changed uploaded file extension
+    if (files[0].mimetype !== UserSearchConstant.CSVExtension) {
+      throw new BadRequestException(
+        ErrorUtil.badRequest(
+          ErrorConstant.Type.WrongFileExtension,
+          ErrorConstant.Property.UploadCSVFile,
+        ),
+      );
+    }
     const user = await this.userService.getUser(userId);
 
-    const searchValues: string[] = files[0].buffer.toString()?.split(',') || [];
+    const csvBufferString: string = files[0].buffer.toString();
+    let searchValues = [];
+    const isHavingBreakLine = !!csvBufferString.match(UserSearchConstant.Delimiter.CRLF);
+
+    const searchValuesSplitedByComma: string[] = csvBufferString
+      ?.split(UserSearchConstant.Delimiter.Comma) || [];
+    if (isHavingBreakLine) {
+      searchValuesSplitedByComma.map(searchValue =>
+        searchValues.push(...searchValue.split(UserSearchConstant.Delimiter.CRLF))
+      )
+    } else {
+      searchValues = searchValuesSplitedByComma;
+    }
+
     if (!searchValues.length || searchValues.length > 100) {
       throw new BadRequestException(
         ErrorUtil.badRequest(
