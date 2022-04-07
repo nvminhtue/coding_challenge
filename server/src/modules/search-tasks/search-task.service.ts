@@ -13,6 +13,7 @@ import { execute } from 'src/utils/child-process.util';
 
 import { SearchStatusEnum, TaskConstant } from '../user-searches/user-search.constant';
 import { UserSearchEntity } from '../user-searches/user-search.entity';
+import { SearchTaskQuery } from './search-task.query';
 import { SearchService } from './search.service';
 
 @Injectable()
@@ -22,6 +23,7 @@ export class SearchTaskService {
     @InjectRepository(UserSearchEntity)
     private userSearchRepo: Repository<UserSearchEntity>,
     private readonly searchService: SearchService,
+    private readonly searchTaskQuery: SearchTaskQuery,
     @InjectConnection()
     private readonly connection: Connection,
     @Inject(WINSTON_MODULE_NEST_PROVIDER) private readonly logger: Logger,
@@ -37,35 +39,14 @@ export class SearchTaskService {
     try {
       let activeTasks = [];
       await this.connection.transaction(async (manager: EntityManager) => {
-        activeTasks = await manager
-          .createQueryBuilder(UserSearchEntity, 'UserSearchEntity')
-          .where({ status: SearchStatusEnum.Pending })
-          .andWhere('UserSearchEntity.attemptsMade < :mininumAttemp', {
-            mininumAttemp: TaskConstant.FirstAttempts,
-          })
-          .andWhere(
-            `UserSearchEntity.runAt
-            BETWEEN current_timestamp - interval '${TaskConstant.ValidIntervalDuration} milliseconds'
-            AND current_timestamp`,
-          )
-          .setLock('pessimistic_write')
-          .take(TaskConstant.MaximumPerFetch)
-          .orderBy('UserSearchEntity.runAt', 'ASC')
-          .getMany();
+        activeTasks = await this.searchTaskQuery.pendingSearchTaskQuery(manager);
 
         if (isEmpty(activeTasks)) {
           return true;
         }
 
-        await manager.update(
-          UserSearchEntity,
-          activeTasks.map(task => task.id),
-          { attemptsMade: TaskConstant.FirstAttempts },
-        );
-        const jobs = chunk(activeTasks, TaskConstant.JobChunk);
-        for (const job of jobs) {
-          await this.queue.add(job, { attempts: TaskConstant.MaximumAttempts });
-        }
+        await this.markingFirstAttempt(activeTasks, manager);
+        await this.taskEnqueuing(activeTasks)
       });
     } catch (error) {
       this.loging(error);
@@ -117,6 +98,23 @@ export class SearchTaskService {
       }
     } catch (error) {
       this.loging(error);
+    }
+  }
+
+  private async markingFirstAttempt (
+    activeTasks: UserSearchEntity[],
+    manager: EntityManager): Promise<void> {
+    manager.update(
+      UserSearchEntity,
+      activeTasks.map(task => task.id),
+      { attemptsMade: TaskConstant.FirstAttempts },
+    );
+  }
+
+  private async taskEnqueuing(activeTasks: UserSearchEntity[]) {
+    const jobs = chunk(activeTasks, TaskConstant.JobChunk);
+    for (const job of jobs) {
+      await this.queue.add(job, { attempts: TaskConstant.MaximumAttempts });
     }
   }
 

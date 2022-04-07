@@ -1,14 +1,13 @@
 import { Injectable } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
-import { EntityNotFoundError, ObjectLiteral, Repository } from 'typeorm';
+import { EntityNotFoundError, ObjectLiteral } from 'typeorm';
 
 import { UserEntity } from './user.entity';
+import { UserQuery } from './user.query';
 
 @Injectable()
 export class UserService {
   constructor(
-    @InjectRepository(UserEntity)
-    private userRepo: Repository<UserEntity>,
+    private userQuery: UserQuery,
   ) {}
 
   async getUser(id: string): Promise<UserEntity> {
@@ -16,9 +15,7 @@ export class UserService {
   }
 
   async findUser(condition: ObjectLiteral): Promise<UserEntity> {
-    const user = await this.userRepo.createQueryBuilder()
-      .where(condition)
-      .getOne()
+    const user = await this.userQuery.getUserQuery(condition);
 
     if (!user) {
       throw new EntityNotFoundError(UserEntity.name, undefined)
