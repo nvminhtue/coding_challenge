@@ -99,14 +99,14 @@ export class SearchService {
     if (!crawledData) {
       throw Error();
     }
-    const searchFound = preview.substring(
-      preview.lastIndexOf(`id="result-stats">About`) + `id="result-stats">`.length,
-      preview.indexOf('</nobr></div>')
-    ).replace(/<nobr>|&nbsp;/g, '');
+    const searchFound = preview.lastIndexOf(`id="result-stats">`) !== -1
+      ? preview.substring(
+          preview.lastIndexOf(`id="result-stats">`) + `id="result-stats">`.length,
+          preview.indexOf('</nobr></div>')
+        ).replace(/<nobr>|&nbsp;/g, '')
+      : '';
     const adWordsTotal = preview.match(/title="Why\sthis\sad\?"/g)?.length || 0;
-    const resultLinkTotal = (preview.match(/role="text">https/g)?.length) || 0;
-    const linkVideoToken = (preview.match(/role="text">\s›\swatch/g)?.length) || 0;
-    const linkTotal = (resultLinkTotal - linkVideoToken) / 2 + linkVideoToken;
+    const linkTotal = (preview.match(/<br><h3\s/g)?.length) || 0;
 
     return {
       preview,
